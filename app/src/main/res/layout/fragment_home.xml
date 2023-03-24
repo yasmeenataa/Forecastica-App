@@ -1,14 +1,305 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".homePage.HomeFragment">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewForecastHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="33dp"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="40dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/side_nav_drawer"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_country_name_home"
+                style="@style/custom_textView"
+                android:text="@string/country_name" />
+
+            <TextView
+                android:id="@+id/txt_date_home"
+                style="@style/custom_textView"
+                android:layout_marginBottom="15dp"
+                android:text="Fri,26 Feb"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/icon_home"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/iconn" />
+
+            <TextView
+                android:id="@+id/txt_description_home"
+                style="@style/custom_textView"
+                android:text="broken clouds "
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/txt_degree_home"
+                style="@style/custom_textView"
+                android:layout_marginBottom="15dp"
+                android:text="13ºC"
+                android:textSize="50sp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_forTime"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/row_time" />
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_forday"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="522dp"
+        tools:listitem="@layout/row_day" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewDetailsHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="33dp"
+        android:layout_margin="15dp"
+        app:cardCornerRadius="40dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp"
+            android:background="@color/primary_color"
+            android:gravity="center">
+
+
+            <ImageView
+                android:id="@+id/icon_pressure"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="24dp"
+                android:src="@drawable/presure"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/pressure_measure"
+                style="@style/custom_textView"
+                android:layout_marginTop="6dp"
+                android:text="@string/zero"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/icon_pressure"
+                app:layout_constraintStart_toStartOf="@+id/icon_pressure"
+                app:layout_constraintTop_toBottomOf="@+id/icon_pressure" />
+
+            <TextView
+                android:id="@+id/txt_presure"
+                style="@style/custom_textView"
+                android:layout_marginTop="4dp"
+                android:text="@string/pressure"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/pressure_measure"
+                app:layout_constraintHorizontal_bias="0.518"
+                app:layout_constraintStart_toStartOf="@+id/pressure_measure"
+                app:layout_constraintTop_toBottomOf="@+id/pressure_measure" />
+
+            <ImageView
+                android:id="@+id/icon_humidity"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:src="@drawable/humidity"
+                app:layout_constraintBottom_toBottomOf="@+id/icon_cloud"
+                app:layout_constraintEnd_toEndOf="@+id/icon_ultraVio"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/icon_ultraVio"
+                app:layout_constraintTop_toTopOf="@+id/icon_cloud"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/humidity_measure"
+                style="@style/custom_textView"
+                android:layout_marginTop="6dp"
+                android:text="@string/zero"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/icon_humidity"
+                app:layout_constraintStart_toStartOf="@+id/icon_humidity"
+                app:layout_constraintTop_toBottomOf="@+id/icon_humidity" />
+
+            <TextView
+                android:id="@+id/txt_humidity"
+                style="@style/custom_textView"
+                android:layout_marginTop="4dp"
+                android:text="@string/humidity"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/humidity_measure"
+                app:layout_constraintHorizontal_bias="0.518"
+                app:layout_constraintStart_toStartOf="@+id/humidity_measure"
+                app:layout_constraintTop_toBottomOf="@+id/humidity_measure" />
+
+            <ImageView
+                android:id="@+id/icon_wind"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="34dp"
+                android:src="@drawable/wind"
+                app:layout_constraintEnd_toEndOf="@+id/icon_cloud"
+                app:layout_constraintStart_toStartOf="@+id/icon_cloud"
+                app:layout_constraintTop_toBottomOf="@+id/txt_cloud" />
+
+            <TextView
+                android:id="@+id/wind_measure"
+                style="@style/custom_textView"
+                android:layout_marginTop="6dp"
+                android:text="@string/zero"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/icon_wind"
+                app:layout_constraintStart_toStartOf="@+id/icon_wind"
+                app:layout_constraintTop_toBottomOf="@+id/icon_wind" />
+
+            <TextView
+                android:id="@+id/txt_wind"
+                style="@style/custom_textView"
+                android:layout_marginTop="4dp"
+                android:text="@string/wind"
+                android:layout_marginBottom="15dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/wind_measure"
+                app:layout_constraintHorizontal_bias="0.518"
+                app:layout_constraintStart_toStartOf="@+id/wind_measure"
+                app:layout_constraintTop_toBottomOf="@+id/wind_measure" />
+
+            <ImageView
+                android:id="@+id/icon_cloud"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="184dp"
+                android:src="@drawable/cloud"
+                app:layout_constraintEnd_toEndOf="@+id/icon_pressure"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/icon_pressure"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/cloud_measure"
+                style="@style/custom_textView"
+                android:layout_marginTop="6dp"
+                android:text="@string/zero"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/icon_cloud"
+                app:layout_constraintStart_toStartOf="@+id/icon_cloud"
+                app:layout_constraintTop_toBottomOf="@+id/icon_cloud" />
+
+            <TextView
+                android:id="@+id/txt_cloud"
+                style="@style/custom_textView"
+                android:layout_marginTop="4dp"
+                android:text="@string/cloud"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/cloud_measure"
+                app:layout_constraintHorizontal_bias="0.518"
+                app:layout_constraintStart_toStartOf="@+id/cloud_measure"
+                app:layout_constraintTop_toBottomOf="@+id/cloud_measure" />
+
+            <ImageView
+                android:id="@+id/icon_ultraVio"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="96dp"
+                android:layout_marginEnd="17dp"
+                android:src="@drawable/ultra_violet"
+                app:layout_constraintBottom_toBottomOf="@+id/icon_pressure"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/icon_pressure"
+                app:layout_constraintTop_toTopOf="@+id/icon_pressure"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/ultraVio_measure"
+                style="@style/custom_textView"
+                android:layout_marginTop="6dp"
+                android:text="@string/zero"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/icon_ultraVio"
+                app:layout_constraintStart_toStartOf="@+id/icon_ultraVio"
+                app:layout_constraintTop_toBottomOf="@+id/icon_ultraVio" />
+
+            <TextView
+                android:id="@+id/txt_ultraVio"
+                style="@style/custom_textView"
+                android:layout_marginTop="4dp"
+                android:text="Ultra Violet"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/ultraVio_measure"
+                app:layout_constraintHorizontal_bias="0.518"
+                app:layout_constraintStart_toStartOf="@+id/ultraVio_measure"
+                app:layout_constraintTop_toBottomOf="@+id/ultraVio_measure" />
+
+            <ImageView
+                android:id="@+id/icon_visibility"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:src="@drawable/visibility"
+                app:layout_constraintBottom_toBottomOf="@+id/icon_wind"
+                app:layout_constraintEnd_toEndOf="@+id/icon_ultraVio"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/icon_ultraVio"
+                app:layout_constraintTop_toTopOf="@+id/icon_wind"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/visibility_measure"
+                style="@style/custom_textView"
+                android:layout_marginTop="6dp"
+                android:text="@string/zero"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/icon_visibility"
+                app:layout_constraintStart_toStartOf="@+id/icon_visibility"
+                app:layout_constraintTop_toBottomOf="@+id/icon_visibility" />
+
+            <TextView
+                android:id="@+id/txt_visibility"
+                style="@style/custom_textView"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/visibility"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/visibility_measure"
+                app:layout_constraintHorizontal_bias="0.475"
+                app:layout_constraintStart_toStartOf="@+id/visibility_measure"
+                app:layout_constraintTop_toBottomOf="@+id/visibility_measure"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>
