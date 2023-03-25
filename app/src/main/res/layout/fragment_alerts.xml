@@ -5,11 +5,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".alerts.AlertsFragment">
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/alert_lottiAnimation"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="188dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
