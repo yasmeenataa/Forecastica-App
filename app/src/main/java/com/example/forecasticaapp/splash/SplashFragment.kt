@@ -10,6 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.Navigation.findNavController
 import com.example.forecasticaapp.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class SplashFragment : Fragment() {
@@ -32,11 +36,13 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
-        Handler().postDelayed({
+        GlobalScope.launch (Dispatchers.Main){
+
+            delay(4000)
             findNavController(view)
                 .navigate(R.id.action_splashFragment_to_homeFragment2)
 
-        }, 5000)
+        }
 
 
     }
