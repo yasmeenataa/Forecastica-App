@@ -9,7 +9,7 @@
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close  Navigation Drawer</string>
     <string name="allTimeOfTheDay">All Time Of The Day</string>
-    <string name="country_name">Cairo</string>
+    <string name="country_name">Country Name</string>
     <string name="slash">/</string>
     <string name="maxTemp">60.0º</string>
     <string name="minTemp">32.0º</string>
@@ -19,5 +19,20 @@
     <string name="wind">Wind</string>
     <string name="visibility">Visibility</string>
     <string name="cloud">Cloud</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
+    <string name="notifications">Notifications</string>
+    <string name="map">Map</string>
+    <string name="gps">GPS</string>
+    <string name="location">Location</string>
+    <string name="temperature">Temperature</string>
+    <string name="celsius">Celsius</string>
+    <string name="kelvin">Kelvin</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="meter_sec">Meter/Sec</string>
+    <string name="mile_hour">Mile/Hour</string>
+    <string name="no_places">no places</string>
 
 </resources>
