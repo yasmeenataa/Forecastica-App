@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".favourite.FavoriteFragment">
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/fav_lottiAnimation"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="72dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/world_wide" />
+
+    <TextView
+        android:id="@+id/txt_no_places"
+        style="@style/custom_textView"
+        android:text="@string/no_places"
+        android:textColor="@color/secondary_color"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/fav_lottiAnimation"
+        app:layout_constraintEnd_toEndOf="@+id/fav_lottiAnimation"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="@+id/fav_lottiAnimation" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_fav_floating"
+        android:layout_width="60dp"
+        android:layout_height="66dp"
+        android:layout_gravity="end"
+        app:fabCustomSize="60dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="56dp"
+        app:srcCompat="@drawable/add_location"
+        app:tint="@color/secondary_color"
+        app:backgroundTint="@color/white"
+        app:fabSize="auto"
+        app:maxImageSize="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_fav"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="522dp"
+        tools:listitem="@layout/row_fav" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
