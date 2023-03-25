@@ -34,5 +34,8 @@
     <string name="meter_sec">Meter/Sec</string>
     <string name="mile_hour">Mile/Hour</string>
     <string name="no_places">no places</string>
+    <string name="from_time">From Time</string>
+    <string name="to_time">To Time</string>
+    <string name="dash">-</string>
 
 </resources>
