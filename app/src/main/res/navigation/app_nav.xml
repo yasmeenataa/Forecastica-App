@@ -45,5 +45,9 @@
         android:label="fragment_initial_setup"
         tools:layout="@layout/fragment_initial_setup"
         app:popUpTo="@id/splashFragment"
-        app:popUpToInclusive="true"/>
+        app:popUpToInclusive="true">
+        <action
+            android:id="@+id/action_initialSetupFragment_to_homeFragment2"
+            app:destination="@id/homeFragment2" />
+    </fragment>
 </navigation>
