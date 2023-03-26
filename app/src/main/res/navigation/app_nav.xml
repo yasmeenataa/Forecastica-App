@@ -15,6 +15,9 @@
             app:destination="@id/homeFragment2"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_splashFragment_to_initialSetupFragment"
+            app:destination="@id/initialSetupFragment" />
     </fragment>
     <fragment
         android:id="@+id/alertsFragment"
@@ -36,4 +39,11 @@
         android:name="com.example.forecasticaapp.favourite.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/initialSetupFragment"
+        android:name="com.example.forecasticaapp.InitialSetupFragment"
+        android:label="fragment_initial_setup"
+        tools:layout="@layout/fragment_initial_setup"
+        app:popUpTo="@id/splashFragment"
+        app:popUpToInclusive="true"/>
 </navigation>
