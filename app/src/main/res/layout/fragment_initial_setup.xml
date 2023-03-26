@@ -60,7 +60,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/icon_setup" />
 
             <RadioGroup
-                android:id="@+id/location_radio_group"
+                android:id="@+id/location_radio_groupSetup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
@@ -74,7 +74,7 @@
                 app:layout_constraintVertical_bias="0.523">
 
                 <RadioButton
-                    android:id="@+id/gps_radio_button"
+                    android:id="@+id/gps_radio_buttonSetup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="2dp"
@@ -85,7 +85,7 @@
                     android:textSize="18sp" />
 
                 <RadioButton
-                    android:id="@+id/map_radio_button"
+                    android:id="@+id/map_radio_buttonSetup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
