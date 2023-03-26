@@ -136,6 +136,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/submit"
+                android:backgroundTint="@color/secondary_color"
                 android:textColor="@color/white"
                 app:cornerRadius="15dp"
                 android:textAllCaps="false"
