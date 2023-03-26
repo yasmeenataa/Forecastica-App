@@ -40,7 +40,7 @@ class SplashFragment : Fragment() {
 
             delay(4000)
             findNavController(view)
-                .navigate(R.id.action_splashFragment_to_homeFragment2)
+                .navigate(R.id.action_splashFragment_to_initialSetupFragment)
 
         }
 
