@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".InitialSetupFragment">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/language_card_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        android:elevation="20dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/day_constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/light_blue">
+
+            <ImageView
+                android:id="@+id/icon_setup"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_settings_24" />
+
+            <TextView
+
+                android:id="@+id/txt_setup"
+                style="@style/custom_textView"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="8dp"
+                android:text="Initial Setup"
+                android:textColor="@color/secondary_color"
+                app:layout_constraintBottom_toBottomOf="@+id/icon_setup"
+                app:layout_constraintStart_toEndOf="@+id/icon_setup" />
+
+            <TextView
+
+                android:id="@+id/txt_locationSetUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/location"
+                android:textColor="@color/secondary_color"
+                android:textSize="25sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/icon_setup" />
+
+            <RadioGroup
+                android:id="@+id/location_radio_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_locationSetUp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.787"
+                app:layout_constraintStart_toEndOf="@+id/txt_locationSetUp"
+                app:layout_constraintTop_toTopOf="@+id/txt_locationSetUp"
+                app:layout_constraintVertical_bias="0.523">
+
+                <RadioButton
+                    android:id="@+id/gps_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:buttonTint="@color/secondary_color"
+                    android:checked="false"
+                    android:text="@string/gps"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <RadioButton
+                    android:id="@+id/map_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:buttonTint="@color/secondary_color"
+                    android:text="@string/map"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </RadioGroup>
+
+            <TextView
+
+                android:id="@+id/txt_notificationSetUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/notifications"
+                android:textColor="@color/secondary_color"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/txt_locationSetUp"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/txt_locationSetUp"
+                app:layout_constraintTop_toBottomOf="@+id/txt_locationSetUp"
+                app:layout_constraintVertical_bias="0.016" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/notification_switchSetup"
+                style="@style/Widget.AppCompat.CompoundButton.Switch"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="70dp"
+                android:layout_marginEnd="28dp"
+
+                android:enabled="true"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_notificationSetUp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txt_notificationSetUp"
+                app:layout_constraintTop_toTopOf="@+id/txt_notificationSetUp"
+                app:thumbTint="@color/switch_thumb_selector"
+                app:trackTint="@color/switch_track_selector">
+
+            </com.google.android.material.materialswitch.MaterialSwitch>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_setupSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/submit"
+                android:textColor="@color/white"
+                app:cornerRadius="15dp"
+                android:textAllCaps="false"
+                android:layout_margin="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txt_notificationSetUp"
+                app:layout_constraintVertical_bias="0.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</FrameLayout>
