@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.forecasticaapp.database.ConcreteLocalSource
 import com.example.forecasticaapp.databinding.FragmentHomeBinding
 import com.example.forecasticaapp.homePage.viewModel.HomeViewModel
 import com.example.forecasticaapp.homePage.viewModel.HomeViewModelFactory
@@ -82,20 +83,39 @@ class HomeFragment : Fragment() {
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
         (context as AppCompatActivity).supportActionBar?.title = "Home"
 
-        homeViewModelFactory = HomeViewModelFactory(Repository.getInstance(ApiClient.getInstance()))
+        homeViewModelFactory = HomeViewModelFactory(
+            Repository.getInstance(
+                ApiClient.getInstance(),
+                ConcreteLocalSource(requireContext())
+            )
+        )
         homeViewModel = ViewModelProvider(this, homeViewModelFactory)[HomeViewModel::class.java]
         daysAdapter = DaysAdapter(ArrayList(), requireContext())
         binding.recyclerViewForday.adapter = daysAdapter
         hoursAdapter = HoursAdapter(ArrayList(), requireContext())
         binding.recyclerViewForTime.adapter = hoursAdapter
         if (isConnected(requireContext())) {
-        val location=sharedPreferences.getString(Constants.LOCATION,Constants.ENUM_LOCATION.Gps.toString())
+            val location = sharedPreferences.getString(
+                Constants.LOCATION,
+                Constants.ENUM_LOCATION.Gps.toString()
+            )
             if (location.equals(Constants.ENUM_LOCATION.Gps.toString())) {
                 getLastLocation()
             }
-        }
-        else{
-            Snackbar.make(binding.root,"You're offline, Check Internet Connection",Snackbar.LENGTH_LONG).show()
+        } else {
+            Snackbar.make(
+                binding.root,
+                "You're offline, Check Internet Connection",
+                Snackbar.LENGTH_LONG
+            ).show()
+            homeViewModel.getCurrentWeather()
+            lifecycleScope.launch {
+                homeViewModel.currentWeather.collect { weather ->
+                    if (weather.isNotEmpty()) {
+                        bindingData(weather[0])
+                    }
+                }
+            }
         }
     }
 
@@ -172,15 +192,28 @@ class HomeFragment : Fragment() {
             if (lastLocation != null) {
                 latitude = lastLocation.latitude
                 longitude = lastLocation.longitude
-                Snackbar.make(binding.root,"lat : ${latitude},lon : ${longitude}",Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    binding.root,
+                    "lat : ${latitude},lon : ${longitude}",
+                    Snackbar.LENGTH_LONG
+                ).show()
                 sharedPreferences.edit().putString(Constants.GPS_LON, longitude.toString()).apply()
                 sharedPreferences.edit().putString(Constants.GPS_LAT, latitude.toString()).apply()
             } else {
                 latitude = sharedPreferences.getFloat(Constants.MAP_LAT, 0f).toDouble()
                 longitude = sharedPreferences.getFloat(Constants.MAP_LON, 0f).toDouble()
             }
-            Snackbar.make(binding.root,"lat : ${latitude},lon : ${longitude}",Snackbar.LENGTH_LONG).show()
-            homeViewModel.getOneCallResponse(latitude, longitude, Constants.ENUM_UNITS.standard.toString(), "en")
+            Snackbar.make(
+                binding.root,
+                "lat : ${latitude},lon : ${longitude}",
+                Snackbar.LENGTH_LONG
+            ).show()
+            homeViewModel.getOneCallResponse(
+                latitude,
+                longitude,
+                Constants.ENUM_UNITS.standard.toString(),
+                "en"
+            )
             lifecycleScope.launch() {
                 homeViewModel.data.collectLatest { result ->
                     when (result) {
@@ -190,6 +223,8 @@ class HomeFragment : Fragment() {
                         }
                         is APIState.Success -> {
                             bindingData(result.data)
+                            homeViewModel.deleteCurrentWeather()
+                            homeViewModel.insertCurrentWeather(result.data)
                         }
                         is APIState.Failure -> {
                             binding.homeProgressBar.visibility = VISIBLE
