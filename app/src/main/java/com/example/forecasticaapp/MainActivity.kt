@@ -1,6 +1,5 @@
 package com.example.forecasticaapp
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -9,10 +8,9 @@ import androidx.core.view.GravityCompat
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.forecasticaapp.databinding.ActivityMainBinding
-import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityMainBinding.inflate(layoutInflater)
@@ -20,8 +18,8 @@ class MainActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setHomeAsUpIndicator(R.drawable.menu)
         actionBar!!.setDisplayShowCustomEnabled(true)
-        actionBar!!.setDisplayHomeAsUpEnabled(true)
-        actionBar?.title="Home"
+        actionBar.setDisplayHomeAsUpEnabled(true)
+        actionBar.title ="Home"
         binding.navegatorLayout.itemIconTintList = null
         val navController = findNavController(this, R.id.nav_host_fragment)
         setupWithNavController(binding.navegatorLayout, navController)
@@ -33,10 +31,6 @@ class MainActivity : AppCompatActivity() {
         )
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
-
-
-
-
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
@@ -47,8 +41,6 @@ class MainActivity : AppCompatActivity() {
                 binding.drawerLayout.openDrawer(GravityCompat.START)
             }
         }
-
         return super.onOptionsItemSelected(item)
     }
-
 }
