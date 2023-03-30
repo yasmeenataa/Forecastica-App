@@ -9,4 +9,8 @@ interface RepositoryInterface {
         units: String,
         lang: String
     ): Flow<OneCallResponse>
+
+     suspend fun getCurrentWeather(): List<OneCallResponse>
+    suspend fun deleteCurrentWeather()
+    suspend fun insertCurrentWeather(weather: OneCallResponse?)
 }
