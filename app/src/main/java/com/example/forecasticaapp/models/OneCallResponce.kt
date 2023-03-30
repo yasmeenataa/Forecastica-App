@@ -1,6 +1,14 @@
 package com.example.forecasticaapp.models
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "CurrentWeather")
+
 data class OneCallResponse(
+    @PrimaryKey @ColumnInfo(name = "id")
+    val id: Int=1,
     val lat: Double,
     val lon: Double,
     val timezone: String,
@@ -96,3 +104,4 @@ data class Alert(
     val end: Long,
     val description: String
 )
+
