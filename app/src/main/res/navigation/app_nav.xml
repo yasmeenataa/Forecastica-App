@@ -26,7 +26,7 @@
         tools:layout="@layout/fragment_alerts" />
     <fragment
         android:id="@+id/homeFragment2"
-        android:name="com.example.forecasticaapp.homePage.HomeFragment"
+        android:name="com.example.forecasticaapp.homePage.view.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
