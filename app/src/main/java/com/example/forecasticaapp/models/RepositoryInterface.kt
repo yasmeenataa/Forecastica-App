@@ -1,5 +1,6 @@
 package com.example.forecasticaapp.models
 
+import com.example.forecasticaapp.database.RoomFavPojo
 import kotlinx.coroutines.flow.Flow
 
 interface RepositoryInterface {
@@ -10,7 +11,11 @@ interface RepositoryInterface {
         lang: String
     ): Flow<OneCallResponse>
 
-     suspend fun getCurrentWeather(): List<OneCallResponse>
+      fun getCurrentWeather(): Flow<List<RoomHomePojo>>
     suspend fun deleteCurrentWeather()
-    suspend fun insertCurrentWeather(weather: OneCallResponse?)
+    suspend fun insertCurrentWeather(weather: RoomHomePojo?)
+
+    fun  getFavWeather(): Flow<List<RoomFavPojo>>
+    suspend fun insertFavWeather(favWeather: RoomFavPojo)
+    suspend fun deleteFavWeather(favWeather: RoomFavPojo)
 }

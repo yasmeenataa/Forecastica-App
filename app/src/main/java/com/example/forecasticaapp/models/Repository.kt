@@ -1,6 +1,7 @@
 package com.example.forecasticaapp.models
 
 import com.example.forecasticaapp.database.LocalSource
+import com.example.forecasticaapp.database.RoomFavPojo
 import com.example.forecasticaapp.network.RemoteSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -18,7 +19,7 @@ class Repository private constructor(
         return flowOf(remoteSource.getOneCallResponse(lat, lon, units, lang))
     }
 
-    override suspend fun getCurrentWeather(): List<OneCallResponse> {
+    override  fun getCurrentWeather(): Flow<List<RoomHomePojo>> {
         return localSource.getCurrentWeather()
     }
 
@@ -26,8 +27,20 @@ class Repository private constructor(
         localSource.deleteCurrentWeather()
     }
 
-    override suspend fun insertCurrentWeather(weather: OneCallResponse?) {
+    override suspend fun insertCurrentWeather(weather: RoomHomePojo?) {
         localSource.insertCurrentWeather(weather)
+    }
+
+    override fun getFavWeather(): Flow<List<RoomFavPojo>> {
+       return localSource.getFavWeather()
+    }
+
+    override suspend fun insertFavWeather(favWeather: RoomFavPojo) {
+        localSource.insertFavWeather(favWeather)
+    }
+
+    override suspend fun deleteFavWeather(favWeather: RoomFavPojo) {
+        localSource.deleteFavWeather(favWeather)
     }
 
     companion object {
