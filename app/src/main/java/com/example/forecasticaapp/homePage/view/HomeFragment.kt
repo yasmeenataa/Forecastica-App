@@ -28,8 +28,9 @@ import com.example.forecasticaapp.homePage.viewModel.HomeViewModel
 import com.example.forecasticaapp.homePage.viewModel.HomeViewModelFactory
 import com.example.forecasticaapp.models.OneCallResponse
 import com.example.forecasticaapp.models.Repository
-import com.example.forecasticaapp.network.APIState
+import com.example.forecasticaapp.models.RoomHomePojo
 import com.example.forecasticaapp.network.ApiClient
+import com.example.forecasticaapp.network.ResponseState
 import com.example.forecasticaapp.utils.*
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
@@ -41,12 +42,12 @@ import kotlin.collections.ArrayList
 const val PERMISSION_ID = 44
 
 class HomeFragment : Fragment() {
-    lateinit var binding: FragmentHomeBinding
+    private lateinit var binding: FragmentHomeBinding
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    lateinit var homeViewModel: HomeViewModel
-    lateinit var homeViewModelFactory: HomeViewModelFactory
-    var latitude: Double = 0.0
-    var longitude: Double = 0.0
+    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var homeViewModelFactory: HomeViewModelFactory
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
     private lateinit var daysAdapter: DaysAdapter
     private lateinit var hoursAdapter: HoursAdapter
     private lateinit var sharedPreferences: SharedPreferences
@@ -101,19 +102,46 @@ class HomeFragment : Fragment() {
             } else {
                 latitude = sharedPreferences.getFloat(Constants.MAP_LATH, 0f).toDouble()
                 longitude = sharedPreferences.getFloat(Constants.MAP_LONH, 0f).toDouble()
-                callAPI(latitude, longitude, Constants.ENUM_UNITS.standard.toString(), "en")
+                //callAPI(latitude, longitude, Constants.ENUM_UNITS.standard.toString(), "en")
             }
         } else {
             Snackbar.make(
                 binding.root,
                 "You're offline, Check Internet Connection",
-                Snackbar.LENGTH_LONG
+                Snackbar.ANIMATION_MODE_FADE
             ).show()
             homeViewModel.getCurrentWeather()
             lifecycleScope.launch {
-                homeViewModel.currentWeather.collect { weather ->
-                    if (weather.isNotEmpty()) {
-                        bindingData(weather[0])
+                homeViewModel._currentWeather.collect { weather ->
+                    when (weather) {
+                        is ResponseState.Loading -> {
+                            binding.homeProgressBar.visibility = VISIBLE
+                            binding.homeLinear.visibility = GONE
+                        }
+                        is ResponseState.Success -> {
+                            val oneCallResponse: OneCallResponse = OneCallResponse(
+                                weather.data.lat,
+                                weather.data.lon,
+                                weather.data.timezone,
+                                weather.data.timezone_offset,
+                                weather.data.current,
+                                weather.data.hourly,
+                                weather.data.daily,
+                                weather.data.alerts
+                            )
+                            bindingData(oneCallResponse)
+
+                        }
+                        is ResponseState.Failure -> {
+                            binding.homeProgressBar.visibility = VISIBLE
+                            binding.homeLinear.visibility = GONE
+                            Snackbar.make(
+                                binding.root,
+                                weather.msg.toString(),
+                                Snackbar.LENGTH_LONG
+                            )
+                                .show()
+                        }
                     }
                 }
             }
@@ -244,18 +272,29 @@ class HomeFragment : Fragment() {
             lang
         )
         lifecycleScope.launch() {
-            homeViewModel.data.collectLatest { result ->
+            homeViewModel.oneCallResponse.collectLatest { result ->
                 when (result) {
-                    is APIState.Loading -> {
+                    is ResponseState.Loading -> {
                         binding.homeProgressBar.visibility = VISIBLE
                         binding.homeLinear.visibility = GONE
                     }
-                    is APIState.Success -> {
+                    is ResponseState.Success -> {
                         bindingData(result.data)
                         homeViewModel.deleteCurrentWeather()
-                        homeViewModel.insertCurrentWeather(result.data)
+                        val roomHomePojo: RoomHomePojo = RoomHomePojo(
+                            1,
+                            result.data.lat,
+                            result.data.lon,
+                            result.data.timezone,
+                            result.data.timezone_offset,
+                            result.data.current,
+                            result.data.hourly,
+                            result.data.daily,
+                            result.data.alerts
+                        )
+                        homeViewModel.insertCurrentWeather(roomHomePojo)
                     }
-                    is APIState.Failure -> {
+                    is ResponseState.Failure -> {
                         binding.homeProgressBar.visibility = VISIBLE
                         binding.homeLinear.visibility = GONE
                         Snackbar.make(binding.root, result.msg.toString(), Snackbar.LENGTH_LONG)

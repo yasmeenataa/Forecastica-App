@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.forecasticaapp.models.OneCallResponse
 import com.example.forecasticaapp.models.RepositoryInterface
-import com.example.forecasticaapp.network.APIState
+import com.example.forecasticaapp.models.RoomHomePojo
+
+import com.example.forecasticaapp.network.ResponseState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,10 +14,10 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val _irpo: RepositoryInterface) : ViewModel() {
-    private var oneCallResponse = MutableStateFlow<APIState>(APIState.Loading)
-    val data = oneCallResponse
-    private var _currentWeather: MutableStateFlow<List<OneCallResponse>> = MutableStateFlow<List<OneCallResponse>>(ArrayList())
-    val currentWeather =_currentWeather
+     var oneCallResponse = MutableStateFlow<ResponseState<OneCallResponse>>(ResponseState.Loading)
+
+     var _currentWeather= MutableStateFlow<ResponseState<RoomHomePojo>>(ResponseState.Loading)
+
 
     fun getOneCallResponse(
         lat: Double,
@@ -25,12 +27,12 @@ class HomeViewModel(private val _irpo: RepositoryInterface) : ViewModel() {
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             _irpo.getOneCallResponse(lat, lon, units, lang)
-                ?.catch { e -> oneCallResponse.value = APIState.Failure(e) }
-                ?.collect { data -> oneCallResponse.value = APIState.Success(data) }
+                ?.catch { e -> oneCallResponse.value = ResponseState.Failure(e) }
+                ?.collect { data -> oneCallResponse.value = ResponseState.Success(data) }
         }
     }
 
-    fun insertCurrentWeather(weather: OneCallResponse?) {
+    fun insertCurrentWeather(weather: RoomHomePojo?) {
         viewModelScope.launch(Dispatchers.IO) {
             _irpo.insertCurrentWeather(weather)
         }
@@ -38,7 +40,9 @@ class HomeViewModel(private val _irpo: RepositoryInterface) : ViewModel() {
 
     fun getCurrentWeather() {
         viewModelScope.launch(Dispatchers.IO) {
-            _currentWeather.value =  _irpo.getCurrentWeather()
+             _irpo.getCurrentWeather()
+                 ?.catch { e->_currentWeather.value=ResponseState.Failure(e) }
+                 ?.collect{data->_currentWeather.value=ResponseState.Success(data[0])}
 
         }
     }
