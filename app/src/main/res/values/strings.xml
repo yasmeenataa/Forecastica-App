@@ -45,5 +45,6 @@
     <string name="Kelvin">K</string>
     <string name="pascal">Pascal</string>
     <string name="add_to_favourite">Add To Favourite</string>
+    <string name="save_location">Save Location</string>
 
 </resources>
