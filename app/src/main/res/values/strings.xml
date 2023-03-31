@@ -44,5 +44,6 @@
     <string name="Fahrenheit">F</string>
     <string name="Kelvin">K</string>
     <string name="pascal">Pascal</string>
+    <string name="add_to_favourite">Add To Favourite</string>
 
 </resources>
