@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -34,6 +35,8 @@ import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 const val PERMISSION_ID = 44
 
@@ -49,12 +52,6 @@ class HomeFragment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var language: String
     private lateinit var units: String
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -101,6 +98,10 @@ class HomeFragment : Fragment() {
             )
             if (location.equals(Constants.ENUM_LOCATION.Gps.toString())) {
                 getLastLocation()
+            } else {
+                latitude = sharedPreferences.getFloat(Constants.MAP_LATH, 0f).toDouble()
+                longitude = sharedPreferences.getFloat(Constants.MAP_LONH, 0f).toDouble()
+                callAPI(latitude, longitude, Constants.ENUM_UNITS.standard.toString(), "en")
             }
         } else {
             Snackbar.make(
@@ -158,7 +159,6 @@ class HomeFragment : Fragment() {
                 Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
             ), PERMISSION_ID
         )
-        requireActivity().recreate()
     }
 
 
@@ -178,7 +178,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun isLocationEnabled(): Boolean {
+    private fun isLocationEnabled(): Boolean {
         val locationManager: LocationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
@@ -192,49 +192,10 @@ class HomeFragment : Fragment() {
             if (lastLocation != null) {
                 latitude = lastLocation.latitude
                 longitude = lastLocation.longitude
-                Snackbar.make(
-                    binding.root,
-                    "lat : ${latitude},lon : ${longitude}",
-                    Snackbar.LENGTH_LONG
-                ).show()
                 sharedPreferences.edit().putString(Constants.GPS_LON, longitude.toString()).apply()
                 sharedPreferences.edit().putString(Constants.GPS_LAT, latitude.toString()).apply()
-            } else {
-                latitude = sharedPreferences.getFloat(Constants.MAP_LAT, 0f).toDouble()
-                longitude = sharedPreferences.getFloat(Constants.MAP_LON, 0f).toDouble()
             }
-            Snackbar.make(
-                binding.root,
-                "lat : ${latitude},lon : ${longitude}",
-                Snackbar.LENGTH_LONG
-            ).show()
-            homeViewModel.getOneCallResponse(
-                latitude,
-                longitude,
-                Constants.ENUM_UNITS.standard.toString(),
-                "en"
-            )
-            lifecycleScope.launch() {
-                homeViewModel.data.collectLatest { result ->
-                    when (result) {
-                        is APIState.Loading -> {
-                            binding.homeProgressBar.visibility = VISIBLE
-                            binding.homeLinear.visibility = GONE
-                        }
-                        is APIState.Success -> {
-                            bindingData(result.data)
-                            homeViewModel.deleteCurrentWeather()
-                            homeViewModel.insertCurrentWeather(result.data)
-                        }
-                        is APIState.Failure -> {
-                            binding.homeProgressBar.visibility = VISIBLE
-                            binding.homeLinear.visibility = GONE
-                            Snackbar.make(binding.root, result.msg.toString(), Snackbar.LENGTH_LONG)
-                                .show()
-                        }
-                    }
-                }
-            }
+            callAPI(latitude, longitude, Constants.ENUM_UNITS.standard.toString(), "en")
             fusedLocationProviderClient.removeLocationUpdates(this)
         }
     }
@@ -273,6 +234,37 @@ class HomeFragment : Fragment() {
 
         daysAdapter.setList(response.daily)
         hoursAdapter.setList(response.hourly)
+    }
+
+    private fun callAPI(lat: Double, lon: Double, units: String, lang: String) {
+        homeViewModel.getOneCallResponse(
+            lat,
+            lon,
+            units,
+            lang
+        )
+        lifecycleScope.launch() {
+            homeViewModel.data.collectLatest { result ->
+                when (result) {
+                    is APIState.Loading -> {
+                        binding.homeProgressBar.visibility = VISIBLE
+                        binding.homeLinear.visibility = GONE
+                    }
+                    is APIState.Success -> {
+                        bindingData(result.data)
+                        homeViewModel.deleteCurrentWeather()
+                        homeViewModel.insertCurrentWeather(result.data)
+                    }
+                    is APIState.Failure -> {
+                        binding.homeProgressBar.visibility = VISIBLE
+                        binding.homeLinear.visibility = GONE
+                        Snackbar.make(binding.root, result.msg.toString(), Snackbar.LENGTH_LONG)
+                            .show()
+                    }
+                }
+            }
+        }
+
     }
 
 }
