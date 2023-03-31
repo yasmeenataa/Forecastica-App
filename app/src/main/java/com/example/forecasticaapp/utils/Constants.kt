@@ -17,8 +17,11 @@ object Constants{
     enum class Enum_ALERT(){ALARM,NOTIFICATION}
     const val GPS_LON="GPS_LON"
     const val GPS_LAT="GPS_LAT"
-    const val MAP_LON="MAP_LON"
-    const val MAP_LAT="MAP_LAT"
+    const val MAP_LONH="MAP_LONH"
+    const val MAP_LATH="MAP_LATH"
+    const val MAP_LONF="MAP_LONF"
+    const val MAP_LATF="MAP_LATF"
+    const val MAP_ADDRESS="MAP_ADDRESS"
 
 
 
