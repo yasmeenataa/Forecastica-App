@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
+import com.example.forecasticaapp.InitialSetupFragmentDirections
 import com.example.forecasticaapp.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -39,8 +41,9 @@ class SplashFragment : Fragment() {
         GlobalScope.launch (Dispatchers.Main){
 
             delay(4000)
-            findNavController(view)
-                .navigate(R.id.action_splashFragment_to_initialSetupFragment)
+            val action =
+           SplashFragmentDirections.actionSplashFragmentToInitialSetupFragment()
+            Navigation.findNavController(requireView()).navigate(action)
 
         }
 
