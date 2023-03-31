@@ -33,12 +33,20 @@
         android:id="@+id/settingsFragment2"
         android:name="com.example.forecasticaapp.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment2_to_mapFragment2"
+            app:destination="@id/mapFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.example.forecasticaapp.favourite.FavoriteFragment"
+        android:name="com.example.forecasticaapp.favourite.view.FavoriteFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_mapFragment2"
+            app:destination="@id/mapFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/initialSetupFragment"
         android:name="com.example.forecasticaapp.InitialSetupFragment"
@@ -49,5 +57,23 @@
         <action
             android:id="@+id/action_initialSetupFragment_to_homeFragment2"
             app:destination="@id/homeFragment2" />
+        <action
+            android:id="@+id/action_initialSetupFragment_to_mapFragment2"
+            app:destination="@id/mapFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapFragment2"
+        android:name="com.example.forecasticaapp.map.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment2_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
+        <action
+            android:id="@+id/action_mapFragment2_to_homeFragment2"
+            app:destination="@id/homeFragment2" />
+        <argument
+            android:name="destination"
+            app:argType="string" />
     </fragment>
 </navigation>
