@@ -1,4 +1,4 @@
-package com.example.forecasticaapp.favourite
+package com.example.forecasticaapp.favourite.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import com.example.forecasticaapp.R
 import com.example.forecasticaapp.databinding.FragmentFavoriteBinding
 
 
@@ -34,5 +36,9 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (context as AppCompatActivity).supportActionBar?.title = "Favorite"
+        binding.addFavFloating.setOnClickListener {
+            val action =FavoriteFragmentDirections.actionFavoriteFragmentToMapFragment2("Favourite")
+            Navigation.findNavController(requireView()).navigate(action)
+        }
     }
 }
