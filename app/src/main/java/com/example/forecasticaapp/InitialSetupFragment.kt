@@ -11,7 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.example.forecasticaapp.databinding.FragmentInitialSetupBinding
+import com.example.forecasticaapp.favourite.view.FavoriteFragmentDirections
 import com.example.forecasticaapp.utils.Constants
+import com.example.forecasticaapp.utils.isConnected
+import com.google.android.material.snackbar.Snackbar
 
 
 class InitialSetupFragment : Fragment() {
@@ -34,42 +37,58 @@ class InitialSetupFragment : Fragment() {
         sharedPreference = (activity as AppCompatActivity?)
             ?.getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)!!
         if (sharedPreference.getBoolean("first_install", true)) {
-            sharedPreference.edit().putBoolean("first_install", false).apply()
 
             binding.btnSetupSubmit.setOnClickListener {
-                radioButton =
-                    view.findViewById(binding.locationRadioGroupSetup.checkedRadioButtonId)
-                when (radioButton.text.toString()) {
-                    getString(R.string.map) -> {
+
+
+                if (isConnected(requireContext())) {
+                    sharedPreference.edit().putBoolean("first_install", false).apply()
+                    if (binding.notificationSwitchSetup.isChecked) {
                         sharedPreference.edit().putString(
-                            Constants.LOCATION,
-                            Constants.ENUM_LOCATION.Map.toString()
+                            Constants.NOTIFICATIONS,
+                            Constants.ENUM_NOTIFICATIONS.Enabled.toString()
+                        ).apply()
+                    } else {
+                        sharedPreference.edit().putString(
+                            Constants.NOTIFICATIONS,
+                            Constants.ENUM_NOTIFICATIONS.Disabled.toString()
                         ).apply()
                     }
-                    getString(R.string.gps) -> {
-                        sharedPreference.edit().putString(
-                            Constants.LOCATION,
-                            Constants.ENUM_LOCATION.Gps.toString()
-                        ).apply()
+                    radioButton =
+                        view.findViewById(binding.locationRadioGroupSetup.checkedRadioButtonId)
+                    when (radioButton.text.toString()) {
+                        getString(R.string.map) -> {
+                            sharedPreference.edit().putString(
+                                Constants.LOCATION,
+                                Constants.ENUM_LOCATION.Map.toString()
+                            ).apply()
+                            val action =
+                                InitialSetupFragmentDirections.actionInitialSetupFragmentToMapFragment2(
+                                    "Home"
+                                )
+                            Navigation.findNavController(requireView()).navigate(action)
+                        }
+                        getString(R.string.gps) -> {
+                            sharedPreference.edit().putString(
+                                Constants.LOCATION,
+                                Constants.ENUM_LOCATION.Gps.toString()
+                            ).apply()
+                            val action =
+                                InitialSetupFragmentDirections.actionInitialSetupFragmentToHomeFragment2()
+                            Navigation.findNavController(requireView()).navigate(action)
+                        }
                     }
+
                 }
-                if (binding.notificationSwitchSetup.isChecked) {
-                    sharedPreference.edit().putString(
-                        Constants.NOTIFICATIONS,
-                        Constants.ENUM_NOTIFICATIONS.Enabled.toString()
-                    ).apply()
-                } else {
-                    sharedPreference.edit().putString(
-                        Constants.NOTIFICATIONS,
-                        Constants.ENUM_NOTIFICATIONS.Disabled.toString()
-                    ).apply()
+                else
+                {
+                    Snackbar.make(binding.root,"You're Offline,Check Internet Connection",Snackbar.ANIMATION_MODE_SLIDE).show()
                 }
-                Navigation.findNavController(view)
-                    .navigate(R.id.action_initialSetupFragment_to_homeFragment2)
             }
         } else {
-            Navigation.findNavController(view)
-                .navigate(R.id.action_initialSetupFragment_to_homeFragment2)
+            val action =
+                InitialSetupFragmentDirections.actionInitialSetupFragmentToHomeFragment2()
+            Navigation.findNavController(requireView()).navigate(action)
         }
     }
 }
