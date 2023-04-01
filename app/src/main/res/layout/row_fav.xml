@@ -2,12 +2,14 @@
 <androidx.cardview.widget.CardView xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fav_card_view"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginTop="15dp"
+    android:background="@drawable/ripple_effect"
     android:layout_marginEnd="16dp"
     android:layout_marginBottom="10dp"
     android:elevation="20dp"
+    android:clickable="true"
     app:cardCornerRadius="20dp"
     app:cardElevation="20dp"
     app:layout_constraintStart_toStartOf="parent"
@@ -18,8 +20,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fav_constraint_layout"
         android:layout_width="match_parent"
+        android:background="@drawable/ripple_effect"
         android:layout_height="match_parent"
-        android:background="@color/light_blue">
+        >
 
 
         <TextView
@@ -32,16 +35,21 @@
             android:layout_marginBottom="5dp"
             android:text="@string/country_name"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/image_fav_delete"
+            app:layout_constraintHorizontal_bias="0.061"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.375" />
 
         <ImageView
             android:id="@+id/image_fav_delete"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_margin="10dp"
+            android:clickable="true"
+            android:background="@drawable/ripple_effect"
             android:layout_marginEnd="24dp"
             android:src="@drawable/baseline_delete_24"
             app:layout_constraintBottom_toBottomOf="@id/txt_fav_country_name"
