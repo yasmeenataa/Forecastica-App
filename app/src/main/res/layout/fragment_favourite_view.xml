@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".favourite.view.FavouriteViewFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+        <ProgressBar
+            android:id="@+id/fav_view_progressBar"
+            android:visibility="visible"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <LinearLayout
+            android:id="@+id/fav_view_linear"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_fav_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="33dp"
+                app:cardCornerRadius="40dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/side_nav_drawer"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt_country_name_fav_view"
+                        style="@style/custom_textView"
+                        android:text="@string/country_name" />
+
+                    <TextView
+                        android:id="@+id/txt_date_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginBottom="15dp"
+                        android:text="Fri,26 Feb"
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:id="@+id/icon_fav_view"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/iconn" />
+
+                    <TextView
+                        android:id="@+id/txt_description_fav_view"
+                        style="@style/custom_textView"
+                        android:text="broken clouds "
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/txt_degree_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginBottom="15dp"
+                        android:text="13ºC"
+                        android:textSize="30sp" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_forTime_fav_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/row_time" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_forday_fav_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="522dp"
+                tools:listitem="@layout/row_day" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewDetails_fav_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:layout_marginBottom="33dp"
+                app:cardCornerRadius="40dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/primary_color"
+                    android:gravity="center"
+                    android:padding="15dp">
+
+
+                    <ImageView
+                        android:id="@+id/icon_pressure_fav_view"
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="24dp"
+                        android:src="@drawable/presure"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/pressure_measure_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/zero"
+                        android:fontFamily="sans-serif"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/icon_pressure_fav_view"
+                        app:layout_constraintStart_toStartOf="@+id/icon_pressure_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/icon_pressure_fav_view" />
+
+                    <TextView
+                        android:id="@+id/txt_presure_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/pressure"
+                        android:fontFamily="sans-serif"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/pressure_measure_fav_view"
+                        app:layout_constraintHorizontal_bias="0.518"
+                        app:layout_constraintStart_toStartOf="@+id/pressure_measure_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/pressure_measure_fav_view" />
+
+                    <ImageView
+                        android:id="@+id/icon_humidity_fav_view"
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/humidity"
+                        app:layout_constraintBottom_toBottomOf="@+id/icon_cloud_fav_view"
+                        app:layout_constraintEnd_toEndOf="@+id/icon_ultraVio"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="@+id/icon_ultraVio_fav_view"
+                        app:layout_constraintTop_toTopOf="@+id/icon_cloud_fav_view"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/humidity_measure_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/zero"
+                        android:fontFamily="sans-serif"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/icon_humidity_fav_view"
+                        app:layout_constraintStart_toStartOf="@+id/icon_humidity_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/icon_humidity_fav_view" />
+
+                    <TextView
+                        android:id="@+id/txt_humidity_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/humidity"
+                        android:fontFamily="sans-serif"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/humidity_measure_fav_view"
+                        app:layout_constraintHorizontal_bias="0.518"
+                        app:layout_constraintStart_toStartOf="@+id/humidity_measure_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/humidity_measure_fav_view" />
+
+                    <ImageView
+                        android:id="@+id/icon_wind_fav_view"
+                        android:layout_width="800dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="34dp"
+                        android:src="@drawable/wind"
+                        app:layout_constraintEnd_toEndOf="@+id/icon_cloud_fav_view"
+                        app:layout_constraintStart_toStartOf="@+id/icon_cloud_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_cloud_fav_view" />
+
+                    <TextView
+                        android:id="@+id/wind_measure_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/zero"
+                        android:fontFamily="sans-serif"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/icon_wind_fav_view"
+                        app:layout_constraintStart_toStartOf="@+id/icon_wind_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/icon_wind_fav_view" />
+
+                    <TextView
+                        android:id="@+id/txt_wind_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="15dp"
+                        android:text="@string/wind"
+                        android:fontFamily="sans-serif"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/wind_measure_fav_view"
+                        app:layout_constraintHorizontal_bias="0.518"
+                        app:layout_constraintStart_toStartOf="@+id/wind_measure_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/wind_measure_fav_view" />
+
+                    <ImageView
+                        android:id="@+id/icon_cloud_fav_view"
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="184dp"
+                        android:src="@drawable/cloud"
+                        app:layout_constraintEnd_toEndOf="@+id/icon_pressure_fav_view"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/icon_pressure_fav_view"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/cloud_measure_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/zero"
+                        android:fontFamily="sans-serif"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/icon_cloud_fav_view"
+                        app:layout_constraintStart_toStartOf="@+id/icon_cloud_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/icon_cloud_fav_view" />
+
+                    <TextView
+                        android:id="@+id/txt_cloud_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/cloud"
+                        android:fontFamily="sans-serif"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/cloud_measure_fav_view"
+                        app:layout_constraintHorizontal_bias="0.518"
+                        app:layout_constraintStart_toStartOf="@+id/cloud_measure_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/cloud_measure_fav_view" />
+
+                    <ImageView
+                        android:id="@+id/icon_ultraVio_fav_view"
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="96dp"
+                        android:layout_marginEnd="17dp"
+                        android:src="@drawable/ultra_violet"
+                        app:layout_constraintBottom_toBottomOf="@+id/icon_pressure_fav_view"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/icon_pressure_fav_view"
+                        app:layout_constraintTop_toTopOf="@+id/icon_pressure_fav_view"
+                        app:layout_constraintVertical_bias="1.0" />
+
+                    <TextView
+                        android:id="@+id/ultraVio_measure_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/zero"
+                        android:fontFamily="sans-serif"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/icon_ultraVio_fav_view"
+                        app:layout_constraintStart_toStartOf="@+id/icon_ultraVio_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/icon_ultraVio_fav_view" />
+
+                    <TextView
+                        android:id="@+id/txt_ultraVio_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginTop="4dp"
+                        android:text="Ultra Violet"
+                        android:fontFamily="sans-serif"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/ultraVio_measure_fav_view"
+                        app:layout_constraintHorizontal_bias="0.518"
+                        app:layout_constraintStart_toStartOf="@+id/ultraVio_measure_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/ultraVio_measure_fav_view" />
+
+                    <ImageView
+                        android:id="@+id/icon_visibility_fav_view"
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/visibility"
+                        app:layout_constraintBottom_toBottomOf="@+id/icon_wind_fav_view"
+                        app:layout_constraintEnd_toEndOf="@+id/icon_ultraVio_fav_view"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="@+id/icon_ultraVio_fav_view"
+                        app:layout_constraintTop_toTopOf="@+id/icon_wind_fav_view"
+                        app:layout_constraintVertical_bias="1.0" />
+
+                    <TextView
+                        android:id="@+id/visibility_measure_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/zero"
+                        android:fontFamily="sans-serif"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/icon_visibility_fav_view"
+                        app:layout_constraintStart_toStartOf="@+id/icon_visibility_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/icon_visibility_fav_view" />
+
+                    <TextView
+                        android:id="@+id/txt_visibility_fav_view"
+                        style="@style/custom_textView"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="sans-serif"
+                        android:text="@string/visibility"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/visibility_measure_fav_view"
+                        app:layout_constraintHorizontal_bias="0.475"
+                        app:layout_constraintStart_toStartOf="@+id/visibility_measure_fav_view"
+                        app:layout_constraintTop_toBottomOf="@+id/visibility_measure_fav_view"
+                        app:layout_constraintVertical_bias="0.0" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
