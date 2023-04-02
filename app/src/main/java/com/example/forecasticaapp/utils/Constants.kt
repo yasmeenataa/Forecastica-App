@@ -11,7 +11,7 @@ object Constants{
     const val GPS_LATITUDE="GPS_LATITUDE"
     const val SHARED_PREFERENCE_NAME="SetupSharedPreferences"
     const val API_ID="40dac0af7018969cbb541943f944ba29"
-    const val BASE_URL="https://api.openweathermap.org/data/3.0/"
+    const val BASE_URL="https://api.openweathermap.org/data/2.5/"
     enum class ENUM_UNITS(){standard,metric,imperial}
     enum class Enum_lANGUAGE(){ar,en}
     enum class Enum_ALERT(){ALARM,NOTIFICATION}

@@ -10,11 +10,12 @@ import com.example.forecasticaapp.models.RoomHomePojo
 
 
 
-@Database(entities = [RoomHomePojo::class,RoomFavPojo::class], version = 3)
+@Database(entities = [RoomHomePojo::class,RoomFavPojo::class,RoomAlertPojo::class], version = 2)
 @TypeConverters(TypeConverter::class)
 abstract class WeatherDatabase : RoomDatabase() {
     abstract fun getCurrentWeatherDao(): CurrentWeatherDAO
     abstract fun getFavoriteWeatherDao():FavoriteWeatherDAO
+    abstract fun getAlertDao():AlertDAO
 
     companion object {
         @Volatile
