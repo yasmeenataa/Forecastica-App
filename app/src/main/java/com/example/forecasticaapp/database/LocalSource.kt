@@ -12,4 +12,7 @@ interface LocalSource {
     fun  getFavWeather(): Flow<List<RoomFavPojo>>
     suspend fun insertFavWeather(favWeather:RoomFavPojo)
     suspend fun deleteFavWeather(favWeather:RoomFavPojo)
+    fun getAllAlerts(): Flow<List<RoomAlertPojo>>
+   suspend fun  insertAlert(alert:RoomAlertPojo)
+   suspend  fun deleteAlert(alert:RoomAlertPojo)
 }

@@ -14,6 +14,10 @@ class ConcreteLocalSource(context: Context):LocalSource  {
         val db:WeatherDatabase=WeatherDatabase.getInstance(context)
         db.getFavoriteWeatherDao()
     }
+   private  val alertDAO:AlertDAO by lazy {
+       val db:WeatherDatabase= WeatherDatabase.getInstance(context)
+       db.getAlertDao()
+   }
     override suspend fun insertCurrentWeather(weather: RoomHomePojo?) {
        weatherDAO.insertCurrentWeather(weather)
     }
@@ -38,7 +42,16 @@ class ConcreteLocalSource(context: Context):LocalSource  {
         favoriteDAO.deleteFavWeather(favWeather)
     }
 
-//    override  fun getCurrentWeather(): Flow<OneCallResponse> {
-//        return weatherDAO.getCurrentWeather()
-//    }
+
+    override fun getAllAlerts(): Flow<List<RoomAlertPojo>> {
+        return alertDAO.getAllAlerts()
+    }
+
+    override suspend fun  insertAlert(alert:RoomAlertPojo) {
+        alertDAO.insertAlert(alert)
+    }
+
+    override suspend fun deleteAlert(alert:RoomAlertPojo){
+       alertDAO.deleteAlert(alert)
+    }
 }
