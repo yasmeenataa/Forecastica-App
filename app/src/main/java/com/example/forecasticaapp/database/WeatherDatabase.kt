@@ -10,7 +10,7 @@ import com.example.forecasticaapp.models.RoomHomePojo
 
 
 
-@Database(entities = [RoomHomePojo::class,RoomFavPojo::class], version = 1)
+@Database(entities = [RoomHomePojo::class,RoomFavPojo::class], version = 3)
 @TypeConverters(TypeConverter::class)
 abstract class WeatherDatabase : RoomDatabase() {
     abstract fun getCurrentWeatherDao(): CurrentWeatherDAO
