@@ -1,6 +1,7 @@
 package com.example.forecasticaapp.models
 
 import com.example.forecasticaapp.database.LocalSource
+import com.example.forecasticaapp.database.RoomAlertPojo
 import com.example.forecasticaapp.database.RoomFavPojo
 import com.example.forecasticaapp.network.RemoteSource
 import kotlinx.coroutines.flow.Flow
@@ -42,6 +43,19 @@ class Repository private constructor(
     override suspend fun deleteFavWeather(favWeather: RoomFavPojo) {
         localSource.deleteFavWeather(favWeather)
     }
+
+    override suspend fun deleteAlert(alert: RoomAlertPojo) {
+        localSource.deleteAlert(alert)
+    }
+
+    override fun getAllAlerts(): Flow<List<RoomAlertPojo>> {
+       return localSource.getAllAlerts()
+    }
+
+    override suspend fun insertAlert(alert: RoomAlertPojo) {
+       localSource.insertAlert(alert)
+    }
+
 
     companion object {
         private var instance: Repository? = null
