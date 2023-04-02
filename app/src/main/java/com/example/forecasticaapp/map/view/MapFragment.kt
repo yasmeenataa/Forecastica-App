@@ -1,6 +1,8 @@
-package com.example.forecasticaapp.map
+package com.example.forecasticaapp.map.view
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.location.Geocoder
 import android.os.Bundle
@@ -9,9 +11,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.forecasticaapp.R
+import com.example.forecasticaapp.database.ConcreteLocalSource
+import com.example.forecasticaapp.database.RoomFavPojo
 import com.example.forecasticaapp.databinding.FragmentMapBinding
+import com.example.forecasticaapp.map.viewModel.MapViewModel
+import com.example.forecasticaapp.map.viewModel.MapViewModelFactory
+import com.example.forecasticaapp.models.Repository
+import com.example.forecasticaapp.network.ApiClient
 import com.example.forecasticaapp.utils.Constants
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.SupportMapFragment
@@ -24,13 +33,15 @@ class MapFragment : Fragment() {
     private lateinit var binding: FragmentMapBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var geoCoder: Geocoder
-    private lateinit var address: String
-    private lateinit var destination:String
+    private var address: String = ""
+    private lateinit var destination: String
+    private lateinit var mapViewModel: MapViewModel
+    private lateinit var mapViewModelFactory: MapViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         assert(arguments != null)
-        destination= arguments?.let { MapFragmentArgs.fromBundle(it).destination }.toString()
+        destination = arguments?.let { MapFragmentArgs.fromBundle(it).destination }.toString()
 
     }
 
@@ -45,6 +56,13 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+        mapViewModelFactory = MapViewModelFactory(
+            Repository.getInstance(
+                ApiClient.getInstance(),
+                ConcreteLocalSource(requireContext())
+            )
+        )
+        mapViewModel = ViewModelProvider(this, mapViewModelFactory)[MapViewModel::class.java]
         sharedPreferences = (activity as AppCompatActivity?)
             ?.getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)!!
         geoCoder = Geocoder(requireContext(), Locale.getDefault())
@@ -65,10 +83,8 @@ class MapFragment : Fragment() {
                 val city = addresses!![0].locality
                 val country = addresses[0].countryName
                 address = "$country/$city"
-                when(destination)
-                {
-                    "Home"->
-                    {
+                when (destination) {
+                    "Home" -> {
                         sharedPreferences.edit().putFloat(Constants.MAP_LONH, lat.toFloat())
                             .apply()
                         sharedPreferences.edit()
@@ -78,23 +94,61 @@ class MapFragment : Fragment() {
                                 .navigate(R.id.action_mapFragment2_to_homeFragment2)
                         }
                     }
-                    "Favourite"->
-                    {
-                        sharedPreferences.edit().putString(Constants.MAP_LONF, lat.toString())
-                            .apply()
-                        sharedPreferences.edit()
-                            .putString(Constants.MAP_LATF, lon.toString()).apply()
+                    "Favourite" -> {
+                        binding.btnSaveLocation.setOnClickListener {
+                            if (city == null) {
+                                Snackbar.make(
+                                    binding.root,
+                                    "Sorry, Couldn't find city",
+                                    Snackbar.LENGTH_LONG
+                                )
+                                    .show()
+                            } else {
+                                val alertDialog = AlertDialog.Builder(context)
 
-                        if (city != null) {
-                            sharedPreferences.edit().putString(Constants.MAP_ADDRESS, address).apply()
-                        } else {
-                            Snackbar.make(binding.root, "Sorry, Couldn't find city", Snackbar.LENGTH_LONG)
-                                .show()
+                                alertDialog.apply {
+                                    setIcon(R.drawable.add_location)
+                                    setTitle("Add Location")
+                                    setMessage("Are you sure you want to add ${address} to favorite?")
+                                    setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
+
+
+                                        val roomFavPojo =
+                                            RoomFavPojo(lat = lat, lon = lon, address = address)
+
+                                        mapViewModel.insertFavWeather(roomFavPojo)
+
+                                        Navigation.findNavController(view)
+                                            .navigate(R.id.action_mapFragment2_to_favoriteFragment)
+                                    }
+
+                                    setNegativeButton("Cancel") { _, _ ->
+
+
+                                    }.create().show()
+                                }
+                            }
                         }
                     }
+
                 }
+            }
+
+        }
+        binding.btnSaveLocation.setOnClickListener {
+
+            if (address == "") {
+
+                Snackbar.make(
+                    binding.root,
+                    "First, You have to mark the location",
+                    Snackbar.LENGTH_LONG
+                )
+                    .show()
 
             }
         }
     }
+
 }
+
