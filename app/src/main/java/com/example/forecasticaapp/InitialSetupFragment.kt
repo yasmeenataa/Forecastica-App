@@ -48,6 +48,9 @@ class InitialSetupFragment : Fragment() {
                             Constants.NOTIFICATIONS,
                             Constants.ENUM_NOTIFICATIONS.Enabled.toString()
                         ).apply()
+                        sharedPreference.edit()
+                            .putString(Constants.ALERT_TYPE, Constants.Enum_ALERT.ALARM.toString())
+                            .apply()
                     } else {
                         sharedPreference.edit().putString(
                             Constants.NOTIFICATIONS,
@@ -79,10 +82,12 @@ class InitialSetupFragment : Fragment() {
                         }
                     }
 
-                }
-                else
-                {
-                    Snackbar.make(binding.root,"You're Offline,Check Internet Connection",Snackbar.ANIMATION_MODE_SLIDE).show()
+                } else {
+                    Snackbar.make(
+                        binding.root,
+                        "You're Offline,Check Internet Connection",
+                        Snackbar.ANIMATION_MODE_SLIDE
+                    ).show()
                 }
             }
         } else {
