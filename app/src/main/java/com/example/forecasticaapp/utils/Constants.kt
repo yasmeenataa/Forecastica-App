@@ -19,9 +19,9 @@ object Constants{
     const val GPS_LAT="GPS_LAT"
     const val MAP_LONH="MAP_LONH"
     const val MAP_LATH="MAP_LATH"
-    const val MAP_LONF="MAP_LONF"
-    const val MAP_LATF="MAP_LATF"
-    const val MAP_ADDRESS="MAP_ADDRESS"
+    const val COUNTRY_NAME="CountryName"
+    const val ALERT_TYPE="ALERT_TYPE"
+
 
 
 
