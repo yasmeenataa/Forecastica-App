@@ -91,3 +91,17 @@ fun isConnected(context: Context): Boolean {
     return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!
         .isConnected
 }
+fun getDateToAlert(timestamp: Long, language: String): String{
+    return SimpleDateFormat("dd MMM, yyyy",Locale(language)).format(timestamp)
+}
+fun getTimeToAlert(timestamp: Long, language: String): String{
+    return SimpleDateFormat("h:mm a",Locale(language)).format(timestamp)
+}
+fun convertDateToLong(date:String): Long {
+    val format=SimpleDateFormat("dd MMM, yyyy")
+   return format.parse(date).time
+}
+fun convertTimeToLong(time:String):Long{
+    val format = SimpleDateFormat("hh:mm a")
+    return format.parse(time).time
+}
