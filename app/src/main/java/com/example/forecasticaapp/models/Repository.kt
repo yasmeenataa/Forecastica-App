@@ -12,15 +12,15 @@ class Repository private constructor(
 
 ) : RepositoryInterface {
     override suspend fun getOneCallResponse(
-        lat: Double,
-        lon: Double,
-        units: String,
-        lang: String
+        lat: Double?,
+        lon: Double?,
+        units: String?,
+        lang: String?
     ): Flow<OneCallResponse> {
         return flowOf(remoteSource.getOneCallResponse(lat, lon, units, lang))
     }
 
-    override  fun getCurrentWeather(): Flow<List<RoomHomePojo>> {
+    override  fun getCurrentWeather(): Flow<List<OneCallResponse>> {
         return localSource.getCurrentWeather()
     }
 
@@ -28,7 +28,7 @@ class Repository private constructor(
         localSource.deleteCurrentWeather()
     }
 
-    override suspend fun insertCurrentWeather(weather: RoomHomePojo?) {
+    override suspend fun insertCurrentWeather(weather: OneCallResponse?) {
         localSource.insertCurrentWeather(weather)
     }
 

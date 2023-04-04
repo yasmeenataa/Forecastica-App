@@ -6,15 +6,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface RepositoryInterface {
     suspend fun getOneCallResponse(
-        lat: Double,
-        lon: Double,
-        units: String,
-        lang: String
+        lat: Double?,
+        lon: Double?,
+        units: String?,
+        lang: String?
     ): Flow<OneCallResponse>
 
-      fun getCurrentWeather(): Flow<List<RoomHomePojo>>
+      fun getCurrentWeather(): Flow<List<OneCallResponse>>
     suspend fun deleteCurrentWeather()
-    suspend fun insertCurrentWeather(weather: RoomHomePojo?)
+    suspend fun insertCurrentWeather(weather: OneCallResponse?)
 
     fun  getFavWeather(): Flow<List<RoomFavPojo>>
     suspend fun insertFavWeather(favWeather: RoomFavPojo)

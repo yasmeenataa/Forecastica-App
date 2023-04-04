@@ -9,10 +9,10 @@ class ApiClient private constructor() : RemoteSource {
     }
 
     override suspend fun getOneCallResponse(
-        lat: Double,
-        lon: Double,
-        units: String,
-        lang: String
+        lat: Double?,
+        lon: Double?,
+        units: String?,
+        lang: String?
     ): OneCallResponse {
         return apiService.oneCallResponse(lat, lon, units, lang)
     }

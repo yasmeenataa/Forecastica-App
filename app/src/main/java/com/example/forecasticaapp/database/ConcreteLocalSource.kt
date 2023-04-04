@@ -1,6 +1,7 @@
 package com.example.forecasticaapp.database
 
 import android.content.Context
+import com.example.forecasticaapp.models.OneCallResponse
 import com.example.forecasticaapp.models.RoomHomePojo
 import kotlinx.coroutines.flow.Flow
 
@@ -18,7 +19,7 @@ class ConcreteLocalSource(context: Context):LocalSource  {
        val db:WeatherDatabase= WeatherDatabase.getInstance(context)
        db.getAlertDao()
    }
-    override suspend fun insertCurrentWeather(weather: RoomHomePojo?) {
+    override suspend fun insertCurrentWeather(weather: OneCallResponse?) {
        weatherDAO.insertCurrentWeather(weather)
     }
 
@@ -26,7 +27,7 @@ class ConcreteLocalSource(context: Context):LocalSource  {
        weatherDAO.deleteCurrentWeather()
     }
 
-    override  fun getCurrentWeather(): Flow<List<RoomHomePojo>> {
+    override  fun getCurrentWeather(): Flow<List<OneCallResponse>> {
         return weatherDAO.getCurrentWeather()
     }
 

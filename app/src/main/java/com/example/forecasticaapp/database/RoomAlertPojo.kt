@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 data class RoomAlertPojo(
     @PrimaryKey(autoGenerate = true)
     var alertID:Int=0,
-    val dateFrom:String,
-    val dateTo:String,
-    val time:String,
+    val dateFrom:Long,
+    val dateTo:Long,
+    val time:Long,
     val countryName:String,
     val description:String
 )
