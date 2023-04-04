@@ -4,7 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".alerts.AlertsFragment">
+    tools:context=".alerts.view.AlertsFragment">
+
+    <ProgressBar
+        android:id="@+id/alert_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:layout_marginTop="48dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/alert_lottiAnimation"
@@ -35,23 +49,25 @@
         android:layout_width="60dp"
         android:layout_height="66dp"
         android:layout_gravity="end"
-        app:fabCustomSize="60dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginBottom="56dp"
-        app:srcCompat="@drawable/baseline_add_alarm_24"
-        app:tint="@color/secondary_color"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="32dp"
         app:backgroundTint="@color/white"
+        app:fabCustomSize="60dp"
         app:fabSize="auto"
-        app:maxImageSize="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="50dp"
+        app:srcCompat="@drawable/baseline_add_alarm_24"
+        app:tint="@color/secondary_color"
         tools:ignore="SpeakableTextPresentCheck" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_alert"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="522dp"
