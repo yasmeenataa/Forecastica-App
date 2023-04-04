@@ -13,20 +13,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_gravity="center"
-        android:gravity="center">
+        android:layout_gravity="center|top"
+        android:gravity="center|top">
 
     <androidx.cardview.widget.CardView
         style="@style/custom_textView"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/rounded_rectangle"
-        android:layout_gravity="center"
+        android:background="@color/secondary_color"
+        app:cardCornerRadius="25dp"
+        android:layout_gravity="center|top"
         >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_gravity="center|top"
             android:orientation="horizontal"
             android:background="@drawable/rounded_rectangle"
             >
