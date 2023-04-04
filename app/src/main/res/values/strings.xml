@@ -48,5 +48,20 @@
     <string name="save_location">Save Location</string>
     <string name="initial_setup">Initial Setup</string>
     <string name="todo">TODO</string>
+    <string name="from_date">From Date</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="add_date">add date</string>
+    <string name="time">Time</string>
+    <string name="add_time">add time</string>
+    <string name="save_alert">Save Alert</string>
+    <string name="cancel">Cancel</string>
+    <string name="to_date">to_Date</string>
+    <string name="no_alert_weather_is_fine">No Alert the weather is fine</string>
+    <string name="ok">OK</string>
+    <string name="alarm_description">alarm description</string>
+    <string name="country">Country</string>
+    <string name="weather_alarm">Weather Alarm</string>
+    <string name="features">permission</string>
 
 </resources>
