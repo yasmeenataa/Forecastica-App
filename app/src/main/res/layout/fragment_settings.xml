@@ -121,23 +121,23 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/notification_switch"
-                    style="@style/Widget.AppCompat.CompoundButton.Switch"
+                <Switch
+                    android:id="@+id/btn_switch_notify"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="170dp"
-                    android:layout_marginEnd="28dp"
-                    app:trackTint="@color/switch_track_selector"
-                    app:thumbTint="@color/switch_thumb_selector"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
                     android:checked="true"
                     android:enabled="true"
+                    android:thumb="@drawable/thunb_switch"
+                    android:track="@drawable/track_switch"
                     app:layout_constraintBottom_toBottomOf="@+id/txt_notification"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.906"
                     app:layout_constraintStart_toEndOf="@+id/txt_notification"
-                    app:layout_constraintTop_toTopOf="@+id/txt_notification">
+                    app:layout_constraintTop_toTopOf="@+id/txt_notification"
+                    tools:ignore="UseSwitchCompatOrMaterialXml">
 
-                </com.google.android.material.materialswitch.MaterialSwitch>
+                </Switch>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

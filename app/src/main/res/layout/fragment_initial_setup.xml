@@ -14,6 +14,7 @@
         android:layout_gravity="center"
         android:layout_margin="15dp"
         android:elevation="20dp"
+
         app:cardCornerRadius="20dp"
         app:cardElevation="20dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,8 +23,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/day_constraint_layout"
             android:layout_width="match_parent"
+            android:background="@color/light_blue"
             android:layout_height="match_parent"
-            android:background="@color/light_blue">
+            >
 
             <ImageView
                 android:id="@+id/icon_setup"
@@ -82,7 +84,7 @@
                     android:buttonTint="@color/secondary_color"
                     android:checked="true"
                     android:text="@string/gps"
-                    android:textColor="@color/white"
+
                     android:textSize="18sp" />
 
                 <RadioButton
@@ -93,7 +95,6 @@
                     android:layout_marginEnd="10dp"
                     android:buttonTint="@color/secondary_color"
                     android:text="@string/map"
-                    android:textColor="@color/white"
                     android:textSize="18sp" />
             </RadioGroup>
 
@@ -113,24 +114,25 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_locationSetUp"
                 app:layout_constraintVertical_bias="0.016" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <Switch
                 android:id="@+id/notification_switchSetup"
-                style="@style/Widget.AppCompat.CompoundButton.Switch"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginStart="70dp"
-                android:layout_marginEnd="28dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:checked="true"
+                android:contentDescription="@string/todo"
                 android:enabled="true"
+                android:thumb="@drawable/thunb_switch"
+                android:track="@drawable/track_switch"
                 app:layout_constraintBottom_toBottomOf="@+id/txt_notificationSetUp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.74"
                 app:layout_constraintStart_toEndOf="@+id/txt_notificationSetUp"
                 app:layout_constraintTop_toTopOf="@+id/txt_notificationSetUp"
-                android:contentDescription="@string/todo"
-                app:thumbTint="@color/switch_thumb_selector"
-                app:trackTint="@color/switch_track_selector"
-               >
+                app:layout_constraintVertical_bias="0.0"
+                >
 
-            </com.google.android.material.materialswitch.MaterialSwitch>
+            </Switch>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_setupSubmit"
