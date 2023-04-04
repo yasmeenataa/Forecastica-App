@@ -10,7 +10,7 @@ import com.example.forecasticaapp.models.RoomHomePojo
 
 
 
-@Database(entities = [RoomHomePojo::class,RoomFavPojo::class,RoomAlertPojo::class], version = 2)
+@Database(entities = [OneCallResponse::class,RoomFavPojo::class,RoomAlertPojo::class], version = 2)
 @TypeConverters(TypeConverter::class)
 abstract class WeatherDatabase : RoomDatabase() {
     abstract fun getCurrentWeatherDao(): CurrentWeatherDAO
@@ -24,7 +24,7 @@ abstract class WeatherDatabase : RoomDatabase() {
             val instance = Room.databaseBuilder(
                 context.applicationContext,
                 WeatherDatabase::class.java,
-                "WeatherDatabase"
+                "Weather_Database"
             )
                 .fallbackToDestructiveMigration()
                 .build()
