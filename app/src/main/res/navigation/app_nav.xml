@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/alertsFragment"
-        android:name="com.example.forecasticaapp.alerts.AlertsFragment"
+        android:name="com.example.forecasticaapp.alerts.view.AlertsFragment"
         android:label="fragment_alerts"
         tools:layout="@layout/fragment_alerts" />
     <fragment
