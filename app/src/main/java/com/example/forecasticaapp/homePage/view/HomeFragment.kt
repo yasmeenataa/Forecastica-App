@@ -12,6 +12,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -36,6 +37,7 @@ import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -104,11 +106,12 @@ class HomeFragment : Fragment() {
                 longitude = sharedPreferences.getFloat(Constants.MAP_LONH, 0f).toDouble()
                 //callAPI(latitude, longitude, Constants.ENUM_UNITS.standard.toString(), "en")
             }
-        } else {
+        }
+        else {
             Snackbar.make(
                 binding.root,
                 "You're offline, Check Internet Connection",
-                Snackbar.ANIMATION_MODE_FADE
+                Snackbar.LENGTH_LONG
             ).show()
             homeViewModel.getCurrentWeather()
             lifecycleScope.launch {
@@ -119,17 +122,7 @@ class HomeFragment : Fragment() {
                             binding.homeLinear.visibility = GONE
                         }
                         is ResponseState.Success -> {
-                            val oneCallResponse: OneCallResponse = OneCallResponse(
-                                weather.data.lat,
-                                weather.data.lon,
-                                weather.data.timezone,
-                                weather.data.timezone_offset,
-                                weather.data.current,
-                                weather.data.hourly,
-                                weather.data.daily,
-                                weather.data.alerts
-                            )
-                            bindingData(oneCallResponse)
+                            bindingData(weather.data[0])
 
                         }
                         is ResponseState.Failure -> {
@@ -148,11 +141,11 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (checkPermissions())
-            getLastLocation()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        if (checkPermissions())
+//            getLastLocation()
+//    }
 
     private fun getLastLocation() {
         if (checkPermissions()) {
@@ -246,8 +239,14 @@ class HomeFragment : Fragment() {
     fun bindingData(response: OneCallResponse) {
         binding.homeProgressBar.visibility = GONE
         binding.homeLinear.visibility = VISIBLE
-        binding.txtCountryNameHome.text = response.timezone
-        binding.txtDateHome.text = getDayFormat(response.current.dt, language)
+        val geocoder=Geocoder(requireContext(),Locale.getDefault())
+        val countryName: String? =
+            geocoder.getFromLocation(response.lat,response.lon,1)?.get(0)?.adminArea
+        sharedPreferences.edit().putString(Constants.COUNTRY_NAME,countryName).apply()
+        binding.txtCountryNameHome.text = countryName
+        val sdf = SimpleDateFormat("dd MMM, yyyy \n hh:mm")
+        val currentDate = sdf.format(Date())
+        binding.txtDateHome.text = currentDate
         binding.iconHome.setImageResource(getImageIcon(response.current.weather[0].icon))
         binding.txtDescriptionHome.text = response.current.weather[0].description
         binding.txtDegreeHome.text = response.current.temp.toString()
@@ -260,7 +259,7 @@ class HomeFragment : Fragment() {
         binding.cloudMeasure.text = response.current.clouds.toString()
         binding.ultraVioMeasure.text = response.current.uvi.toString()
 
-        daysAdapter.setList(response.daily)
+        daysAdapter.setList(response.daily.drop(1))
         hoursAdapter.setList(response.hourly)
     }
 
@@ -279,20 +278,9 @@ class HomeFragment : Fragment() {
                         binding.homeLinear.visibility = GONE
                     }
                     is ResponseState.Success -> {
-                        bindingData(result.data)
                         homeViewModel.deleteCurrentWeather()
-                        val roomHomePojo: RoomHomePojo = RoomHomePojo(
-                            1,
-                            result.data.lat,
-                            result.data.lon,
-                            result.data.timezone,
-                            result.data.timezone_offset,
-                            result.data.current,
-                            result.data.hourly,
-                            result.data.daily,
-                            result.data.alerts
-                        )
-                        homeViewModel.insertCurrentWeather(roomHomePojo)
+                        homeViewModel.insertCurrentWeather(result.data)
+                        bindingData(result.data)
                     }
                     is ResponseState.Failure -> {
                         binding.homeProgressBar.visibility = VISIBLE

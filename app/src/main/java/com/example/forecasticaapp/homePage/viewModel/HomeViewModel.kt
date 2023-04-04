@@ -16,14 +16,14 @@ import kotlinx.coroutines.launch
 class HomeViewModel(private val _irpo: RepositoryInterface) : ViewModel() {
      var oneCallResponse = MutableStateFlow<ResponseState<OneCallResponse>>(ResponseState.Loading)
 
-     var _currentWeather= MutableStateFlow<ResponseState<RoomHomePojo>>(ResponseState.Loading)
+     var _currentWeather= MutableStateFlow<ResponseState<List<OneCallResponse>>>(ResponseState.Loading)
 
 
     fun getOneCallResponse(
-        lat: Double,
-        lon: Double,
-        units: String,
-        lang: String
+        lat: Double?,
+        lon: Double?,
+        units: String?,
+        lang: String?
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             _irpo.getOneCallResponse(lat, lon, units, lang)
@@ -32,7 +32,7 @@ class HomeViewModel(private val _irpo: RepositoryInterface) : ViewModel() {
         }
     }
 
-    fun insertCurrentWeather(weather: RoomHomePojo?) {
+    fun insertCurrentWeather(weather: OneCallResponse?) {
         viewModelScope.launch(Dispatchers.IO) {
             _irpo.insertCurrentWeather(weather)
         }
@@ -42,7 +42,7 @@ class HomeViewModel(private val _irpo: RepositoryInterface) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
              _irpo.getCurrentWeather()
                  ?.catch { e->_currentWeather.value=ResponseState.Failure(e) }
-                 ?.collect{data->_currentWeather.value=ResponseState.Success(data[0])}
+                 ?.collect{data->_currentWeather.value=ResponseState.Success(data)}
 
         }
     }
