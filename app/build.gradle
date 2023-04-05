@@ -89,4 +89,31 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
     implementation "androidx.work:work-runtime-ktx:2.7.1"
+
+    // Dependencies for local unit tests
+    testImplementation "junit:junit:$junitVersion"
+
+    // AndroidX Test - Instrumented testing
+    androidTestImplementation "androidx.test.ext:junit:$androidXTestExtKotlinRunnerVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
+    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
+    testImplementation "org.robolectric:robolectric:4.8"
+
+    testImplementation "org.hamcrest:hamcrest:2.2"
+    testImplementation "org.hamcrest:hamcrest-library:2.2"
+    androidTestImplementation "org.hamcrest:hamcrest:2.2"
+    androidTestImplementation "org.hamcrest:hamcrest-library:2.2"
+
+
+
+
+
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+
+    //kotlinx-coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
 }
