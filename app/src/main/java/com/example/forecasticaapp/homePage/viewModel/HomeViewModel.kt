@@ -18,7 +18,9 @@ class HomeViewModel(private val _irpo: RepositoryInterface) : ViewModel() {
 
      var _currentWeather= MutableStateFlow<ResponseState<List<OneCallResponse>>>(ResponseState.Loading)
 
-
+init {
+    getCurrentWeather()
+}
     fun getOneCallResponse(
         lat: Double?,
         lon: Double?,

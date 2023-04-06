@@ -53,7 +53,7 @@ class FavoriteFragment : Fragment(), OnFavoriteListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (context as AppCompatActivity).supportActionBar?.title = "Favorite"
+        (context as AppCompatActivity).supportActionBar?.title = getString(R.string.favorite)
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
         favouriteAdapter = FavouriteAdapter(ArrayList(), requireContext(), this)
         favoriteViewModelFactory = FavoriteViewModelFactory(

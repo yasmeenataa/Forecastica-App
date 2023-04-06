@@ -63,7 +63,7 @@ fun getImageIcon(icon: String): Int {
     val iconValue: Int
     when (icon) {
         "01d" -> iconValue = R.drawable.ic_clear_sky_morning
-        "01n" -> iconValue = R.drawable.ic_clear_sky_dawn
+        "01n" -> iconValue = R.drawable.clear_sky
         "02d" -> iconValue = R.drawable.ic_few_cloud_morning
         "02n" -> iconValue = R.drawable.ic_few_cloud_night
         "03n" -> iconValue = R.drawable.ic_scattered_clouds

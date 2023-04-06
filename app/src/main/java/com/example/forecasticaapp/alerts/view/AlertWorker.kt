@@ -2,12 +2,12 @@ package com.example.forecasticaapp.alerts.view
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.PixelFormat
+import android.icu.util.Calendar
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
@@ -20,36 +20,23 @@ import android.view.WindowManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.work.CoroutineWorker
 import androidx.work.WorkManager
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.forecasticaapp.R
 import com.example.forecasticaapp.database.ConcreteLocalSource
-import com.example.forecasticaapp.database.LocalSource
 import com.example.forecasticaapp.database.RoomAlertPojo
-import com.example.forecasticaapp.database.WeatherDatabase
 import com.example.forecasticaapp.databinding.AlarmDialogBinding
-import com.example.forecasticaapp.homePage.viewModel.HomeViewModel
-import com.example.forecasticaapp.homePage.viewModel.HomeViewModelFactory
-import com.example.forecasticaapp.models.Alert
 import com.example.forecasticaapp.models.OneCallResponse
 import com.example.forecasticaapp.models.Repository
 import com.example.forecasticaapp.network.ApiClient
-import com.example.forecasticaapp.network.ResponseState
-import com.example.forecasticaapp.utils.Constants
-import com.example.forecasticaapp.utils.convertDateToLong
-import com.example.forecasticaapp.utils.getDateToAlert
+import com.example.forecasticaapp.utils.*
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import javax.security.auth.login.LoginException
+import java.util.*
 
 class AlertWorker(private var appContext: Context, workerParams: WorkerParameters) :
     CoroutineWorker(appContext, workerParams) {
@@ -58,11 +45,19 @@ class AlertWorker(private var appContext: Context, workerParams: WorkerParameter
         Constants.SHARED_PREFERENCE_NAME,
         Context.MODE_PRIVATE
     )
-    val lat: Double? = sharedPreferences.getString(Constants.GPS_LAT, "")?.toDouble()
-    val lon: Double? = sharedPreferences.getString(Constants.GPS_LON, "")?.toDouble()
+    val lat: Double? = sharedPreferences.getString(Constants.GPS_LAT, "0.0")?.toDouble()
+    val lon: Double? = sharedPreferences.getString(Constants.GPS_LON, "0.0")?.toDouble()
     val language: String? = sharedPreferences.getString(Constants.LANGUAGE, "en")
     val units: String? =
         sharedPreferences.getString(Constants.UNITS, Constants.ENUM_UNITS.standard.toString())
+    val notification = sharedPreferences.getString(
+        Constants.NOTIFICATIONS,
+        Constants.ENUM_NOTIFICATIONS.Enabled.toString()
+    )
+    val alertType = sharedPreferences.getString(
+        Constants.ALERT_TYPE,
+        Constants.Enum_ALERT.NOTIFICATION.toString()
+    )
     var _repo = Repository.getInstance(
         ApiClient.getInstance(),
         ConcreteLocalSource(appContext)
@@ -80,45 +75,51 @@ class AlertWorker(private var appContext: Context, workerParams: WorkerParameter
         systemTime = convertDateToLong(getDateToAlert(systemTime, "en"))
         val alertWorker = inputData.getString("alertWorker")
         var roomAlert = Gson().fromJson(alertWorker, RoomAlertPojo::class.java)
-        if (systemTime >= roomAlert.dateFrom && systemTime <= roomAlert.dateTo) {
+
+        if (checkTime(roomAlert)) {
+            Log.i("TAG", "doWork: checked True ////////////////////////////////")
             var oneCallResponse: OneCallResponse
             val apiClient = ApiClient.getInstance()
-            runBlocking {
-                oneCallResponse = apiClient.getOneCallResponse(lat, lon, units, language)
-            }
+            if (isConnected(appContext)) {
+                Log.i("TAG", "doWork: isConnected : internet isConnected")
+                runBlocking {
+                    oneCallResponse = apiClient.getOneCallResponse(lat, lon, units, language)
+                }
 
-            var desc: String = oneCallResponse.alerts?.get(0)?.event
-                ?: appContext.getString(R.string.no_alert_weather_is_fine)
-            if (desc == "") desc = appContext.getString(R.string.no_alert_weather_is_fine)
+                var desc: String = oneCallResponse.alerts?.get(0)?.event
+                    ?: appContext.getString(R.string.no_alert_weather_is_fine)
+                if (desc == "") desc = appContext.getString(R.string.no_alert_weather_is_fine)
+                if (notification == Constants.ENUM_NOTIFICATIONS.Enabled.toString()) {
+                    Log.i("TAG", "doWork:  notification : $notification =================================")
+                    if (sharedPreferences.getString(
+                            Constants.ALERT_TYPE,
+                            Constants.Enum_ALERT.NOTIFICATION.toString()
+                        ) == Constants.Enum_ALERT.NOTIFICATION.toString()) {
+                        Log.i("TAG", "doWork: alertType : $alertType ////////////////////////////////")
+                        sharedPreferences.getString(Constants.COUNTRY_NAME, "")
+                            ?.let { setupNotification(it, desc) }
+                         } else {
+                        Log.i("TAG", "doWork: alertType : $alertType ////////////////////////////////")
 
-            if (sharedPreferences.getString(
-                    Constants.ALERT_TYPE,
-                    Constants.Enum_ALERT.NOTIFICATION.toString()
-                ) == Constants.Enum_ALERT.NOTIFICATION.toString()
-            ) {
-                sharedPreferences.getString(Constants.COUNTRY_NAME, "")
-                    ?.let { setupNotification(it, desc) }
-            } else {
-                GlobalScope.launch(Dispatchers.Main) {
-                    sharedPreferences.getString(Constants.COUNTRY_NAME, "")
-                        ?.let { SetupAlarm(appContext, desc, it).onCreate() }
+                        GlobalScope.launch(Dispatchers.Main) {
+                            sharedPreferences.getString(Constants.COUNTRY_NAME, "")
+                                ?.let { SetupAlarm(appContext, desc, it).onCreate() }
+                             }
+                    }
+                    runBlocking { _repo.deleteAlert(roomAlert)}
+                    WorkManager.getInstance(appContext)
+                        .cancelAllWorkByTag(roomAlert.dateFrom.toString() + roomAlert.dateTo.toString())
                 }
             }
-            return Result.success()
         } else {
-            Log.i(
-                "TAG",
-                "doWork:systemTime: $systemTime  \n roomAlert.dateTo: ${roomAlert.dateTo} \n roomAlert.time: ${roomAlert.time}"
-            )
-            if (systemTime >= roomAlert.dateTo && systemTime >= roomAlert.time) {
-                _repo.deleteAlert(roomAlert)
-                WorkManager.getInstance(appContext)
-                    .cancelAllWorkByTag(roomAlert.dateFrom.toString() + roomAlert.dateTo.toString())
-                return Result.success()
-            } else {
-                return Result.failure()
-            }
+            Log.i("TAG", "doWork: checked false ////////////////////////////////")
+
+            _repo.deleteAlert(roomAlert)
+            WorkManager.getInstance(appContext)
+                .cancelAllWorkByTag(roomAlert.dateFrom.toString() + roomAlert.dateTo.toString())
+
         }
+        return Result.success()
     }
 
     private fun setupNotification(timezone: String, descriptions: String) {
@@ -163,7 +164,7 @@ class AlertWorker(private var appContext: Context, workerParams: WorkerParameter
 
 
         fun onCreate() {
-            mediaPlayer.start()// no need to call prepare(); create() does that for you
+            mediaPlayer.start()
             val inflater =
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             customDialog = inflater.inflate(R.layout.alarm_dialog, null)
@@ -199,14 +200,13 @@ class AlertWorker(private var appContext: Context, workerParams: WorkerParameter
         }
 
         private fun initView() {
-            // binding.img.setImageResource(R.drawable.ic_broken_cloud)
             binding.txtAlarmDesc.text = description
             binding.txtAlarmCountry.text = country
             binding.btnOkAlarm.setOnClickListener {
+
                 close()
             }
         }
-
         private fun close() {
             try {
                 (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).removeView(
@@ -218,10 +218,16 @@ class AlertWorker(private var appContext: Context, workerParams: WorkerParameter
                 Log.d("Error", e.toString())
             }
             mediaPlayer.release()
-
         }
+    }
 
-
+    private fun checkTime(alert: RoomAlertPojo): Boolean {
+        val calendar = Calendar.getInstance()
+        val currentTime2 = convertTimeToLong(
+            getTimeToAlert( calendar.time.time,"en"))
+        val currentDateInMillis = convertDateToLong( getDateToAlert( Date().time,"en"))
+        Log.i("TAG", "checkTime: alert.dateFrom : ${alert.dateFrom}  ///// \n alert.dateTo : ${alert.dateTo}  \n currentDateInMillis : ${currentDateInMillis} \n   currentTime2: $currentTime2 \n   alert.time: ${alert.time}")
+        return (currentDateInMillis >= alert.dateFrom) && (currentDateInMillis <= alert.dateTo + 300000) && (currentTime2 >= alert.time)
     }
 
 }

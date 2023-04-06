@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getColor
 import androidx.recyclerview.widget.RecyclerView
+import com.example.forecasticaapp.R
 import com.example.forecasticaapp.utils.Constants
 import com.example.forecasticaapp.databinding.RowDayBinding
 import com.example.forecasticaapp.models.Daily
@@ -35,7 +37,17 @@ class DaysAdapter(private var daysList: MutableList<Daily>, var context: Context
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val current = daysList[position]
-        holder.binding.txtDayName.text= getDayFormat(current.dt,language)
+        if(position==0)
+        {
+            holder.binding.txtDayName.text= context.getString(R.string.tomorrow)
+            holder.binding.dayConstraintLayout.setBackgroundColor(context.getColor(R.color.secondary_color))
+        }
+        else
+        {
+            holder.binding.txtDayName.text= getDayFormat(current.dt,language)
+            holder.binding.dayConstraintLayout.setBackgroundColor(context.getColor(R.color.light_blue))
+        }
+
         holder.binding.iconDay.setImageResource(getImageIcon(current.weather[0].icon))
         holder.binding.txtDescDay.text=current.weather[0].description
         holder.binding.txtMaxTempDay.text="${current.temp.max}${getTemperatureUnit(context)}"

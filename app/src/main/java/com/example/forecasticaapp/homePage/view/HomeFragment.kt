@@ -23,6 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.forecasticaapp.R
 import com.example.forecasticaapp.database.ConcreteLocalSource
 import com.example.forecasticaapp.databinding.FragmentHomeBinding
 import com.example.forecasticaapp.homePage.viewModel.HomeViewModel
@@ -36,6 +37,7 @@ import com.example.forecasticaapp.utils.*
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -81,7 +83,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
-        (context as AppCompatActivity).supportActionBar?.title = "Home"
+        (context as AppCompatActivity).supportActionBar?.title = getString(R.string.home)
 
         homeViewModelFactory = HomeViewModelFactory(
             Repository.getInstance(
@@ -100,17 +102,18 @@ class HomeFragment : Fragment() {
                 Constants.ENUM_LOCATION.Gps.toString()
             )
             if (location.equals(Constants.ENUM_LOCATION.Gps.toString())) {
-                getLastLocation()
+                if (checkPermissions())
+                    getLastLocation()
             } else {
                 latitude = sharedPreferences.getFloat(Constants.MAP_LATH, 0f).toDouble()
                 longitude = sharedPreferences.getFloat(Constants.MAP_LONH, 0f).toDouble()
-                //callAPI(latitude, longitude, Constants.ENUM_UNITS.standard.toString(), "en")
+                callAPI(latitude, longitude, units, language)
             }
         }
         else {
             Snackbar.make(
                 binding.root,
-                "You're offline, Check Internet Connection",
+                getString(R.string.checkInternet),
                 Snackbar.LENGTH_LONG
             ).show()
             homeViewModel.getCurrentWeather()
@@ -215,13 +218,20 @@ class HomeFragment : Fragment() {
                 longitude = lastLocation.longitude
                 sharedPreferences.edit().putString(Constants.GPS_LON, longitude.toString()).apply()
                 sharedPreferences.edit().putString(Constants.GPS_LAT, latitude.toString()).apply()
+
+
+            }else{
+                latitude  =  sharedPreferences.getFloat(Constants.GPS_LAT, 0f).toDouble()
+                longitude = sharedPreferences.getFloat(Constants.GPS_LON, 0f).toDouble()
             }
-            callAPI(latitude, longitude, Constants.ENUM_UNITS.standard.toString(), "en")
+
+            callAPI(latitude, longitude, units, language)
+
             fusedLocationProviderClient.removeLocationUpdates(this)
         }
     }
 
-    @SuppressLint("MissingPermission", "VisibleForTests")
+    @SuppressLint("MissingPermission")
     private fun requestNewLocationData() {
         val locationRequest = LocationRequest()
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -249,7 +259,7 @@ class HomeFragment : Fragment() {
         binding.txtDateHome.text = currentDate
         binding.iconHome.setImageResource(getImageIcon(response.current.weather[0].icon))
         binding.txtDescriptionHome.text = response.current.weather[0].description
-        binding.txtDegreeHome.text = response.current.temp.toString()
+        binding.txtDegreeHome.text = response.current.temp.toString()+ getTemperatureUnit(requireContext())
         binding.pressureMeasure.text =
             "${response.current.pressure} ${getString(com.example.forecasticaapp.R.string.pascal)}"
         binding.humidityMeasure.text = response.current.humidity.toString() + " %"
@@ -264,6 +274,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun callAPI(lat: Double, lon: Double, units: String, lang: String) {
+
         homeViewModel.getOneCallResponse(
             lat,
             lon,
@@ -278,8 +289,12 @@ class HomeFragment : Fragment() {
                         binding.homeLinear.visibility = GONE
                     }
                     is ResponseState.Success -> {
-                        homeViewModel.deleteCurrentWeather()
+                        if(Constants.FIRST_INSTALL==1)
                         homeViewModel.insertCurrentWeather(result.data)
+                        else {
+                            homeViewModel.deleteCurrentWeather()
+                            homeViewModel.insertCurrentWeather(result.data)
+                        }
                         bindingData(result.data)
                     }
                     is ResponseState.Failure -> {

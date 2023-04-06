@@ -85,14 +85,28 @@ class MapFragment : Fragment() {
                 address = "$country/$city"
                 when (destination) {
                     "Home" -> {
-                        sharedPreferences.edit().putFloat(Constants.MAP_LONH, lat.toFloat())
-                            .apply()
-                        sharedPreferences.edit()
-                            .putFloat(Constants.MAP_LATH, lon.toFloat()).apply()
+
                         binding.btnSaveLocation.setOnClickListener {
-                            Navigation.findNavController(view)
-                                .navigate(R.id.action_mapFragment2_to_homeFragment2)
+                            val alertDialog = AlertDialog.Builder(context)
+
+                            alertDialog.apply {
+                                setIcon(R.drawable.add_location)
+                                setTitle(getString(R.string.add_location))
+                                setMessage("Are you sure you want to add ${address} to favorite?")
+                                setPositiveButton(getString(R.string.yes)) { _: DialogInterface?, _: Int ->
+                                    sharedPreferences.edit().putFloat(Constants.MAP_LONH, lat.toFloat())
+                                        .apply()
+                                    sharedPreferences.edit()
+                                        .putFloat(Constants.MAP_LATH, lon.toFloat()).apply()
+                                    Navigation.findNavController(view)
+                                        .navigate(R.id.action_mapFragment2_to_homeFragment2)
+                                }
+                                setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                                }.create().show()
+                            }
                         }
+
+
                     }
                     "Favourite" -> {
                         binding.btnSaveLocation.setOnClickListener {
@@ -108,11 +122,9 @@ class MapFragment : Fragment() {
 
                                 alertDialog.apply {
                                     setIcon(R.drawable.add_location)
-                                    setTitle("Add Location")
+                                    setTitle(getString(R.string.add_location))
                                     setMessage("Are you sure you want to add ${address} to favorite?")
-                                    setPositiveButton("Yes") { _: DialogInterface?, _: Int ->
-
-
+                                    setPositiveButton(getString(R.string.yes)) { _: DialogInterface?, _: Int ->
                                         val roomFavPojo =
                                             RoomFavPojo(lat = lat, lon = lon, address = address)
 
@@ -121,10 +133,7 @@ class MapFragment : Fragment() {
                                         Navigation.findNavController(view)
                                             .navigate(R.id.action_mapFragment2_to_favoriteFragment)
                                     }
-
-                                    setNegativeButton("Cancel") { _, _ ->
-
-
+                                    setNegativeButton(getString(R.string.cancel)) { _, _ ->
                                     }.create().show()
                                 }
                             }

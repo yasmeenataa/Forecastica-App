@@ -13,13 +13,14 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import androidx.work.*
 import com.example.forecasticaapp.MainActivity
 import com.example.forecasticaapp.R
@@ -32,7 +33,6 @@ import com.example.forecasticaapp.models.Repository
 import com.example.forecasticaapp.network.ApiClient
 import com.example.forecasticaapp.network.ResponseState
 import com.example.forecasticaapp.utils.Constants
-import com.example.forecasticaapp.utils.convertDateToLong
 import com.example.forecasticaapp.utils.convertTimeToLong
 import com.example.forecasticaapp.utils.getTimeToAlert
 import com.google.android.material.button.MaterialButton
@@ -53,33 +53,41 @@ class AlertsFragment : Fragment(), OnAlertListener {
     private lateinit var alertAdapter: AlertAdapter
     private lateinit var alertViewModel: AlertViewModel
     private lateinit var alertViewModelFactory: AlertViewModelFactory
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var countryName: String
     private var dateFrom: Long = 0
     private var dateTo: Long = 0
     private var time: Long = 0
+    private lateinit var alertType: String
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentAlertsBinding.inflate(inflater, container, false)
+        sharedPreferences = requireActivity().getSharedPreferences(
+            Constants.SHARED_PREFERENCE_NAME,
+            Context.MODE_PRIVATE
+        )
+        alertType =
+            sharedPreferences.getString(Constants.ALERT_TYPE, Constants.Enum_ALERT.NOTIFICATION.toString())
+                .toString()
+
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n", "SimpleDateFormat", "CutPasteId", "NotifyDataSetChanged",
-        "SuspiciousIndentation"
+    @SuppressLint(
+        "SetTextI18n", "SimpleDateFormat", "CutPasteId", "NotifyDataSetChanged",
+        "SuspiciousIndentation", "MissingInflatedId"
     )
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (context as AppCompatActivity).supportActionBar?.title = "Alerts"
+        (context as AppCompatActivity).supportActionBar?.title = getString(R.string.alerts)
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
 
         checkOverlayPermission()
+
         alertAdapter = AlertAdapter(ArrayList(), requireContext(), this)
         alertViewModelFactory = AlertViewModelFactory(
             Repository.getInstance(
@@ -137,13 +145,36 @@ class AlertsFragment : Fragment(), OnAlertListener {
             val alertDialogView =
                 LayoutInflater.from(requireContext()).inflate(R.layout.alert_dialog, null)
             val alertBuilder = AlertDialog.Builder(requireContext()).setView(alertDialogView)
-                .setTitle("Setup Alert").setIcon(R.drawable.baseline_add_alarm_24)
+                .setTitle(getString(R.string.setup_alert)).setIcon(R.drawable.baseline_add_alarm_24)
             val alertDialog = alertBuilder.show()
             val fromDate: TextView = alertDialogView.findViewById(R.id.from_date)
             val toDate: TextView = alertDialogView.findViewById(R.id.to_date)
             val txtTime: TextView = alertDialogView.findViewById(R.id.time)
             alertDialogView.findViewById<MaterialButton>(R.id.btn_cancel_alert).setOnClickListener {
                 alertDialog.dismiss()
+            }
+            if(alertType==Constants.Enum_ALERT.NOTIFICATION.toString())
+            {
+                alertDialogView.findViewById<RadioGroup>(R.id.alert_type_radio_group).check(R.id.notif_radio_button)
+            }
+            else{
+                alertDialogView.findViewById<RadioGroup>(R.id.alert_type_radio_group).check(R.id.alarm_radio_button)
+            }
+            alertDialogView.findViewById<RadioGroup>(R.id.alert_type_radio_group).setOnCheckedChangeListener { group, checkedId ->
+                val alertTypetxt: RadioButton = alertDialogView.findViewById<View>(checkedId) as RadioButton
+                when (alertTypetxt.text) {
+                    getString(R.string.notifications) -> {
+                        sharedPreferences.edit()
+                            .putString(Constants.ALERT_TYPE, Constants.Enum_ALERT.NOTIFICATION.toString())
+                            .apply()
+                    }
+                    getString(R.string.alarm) -> {
+                        sharedPreferences.edit()
+                            .putString(Constants.ALERT_TYPE, Constants.Enum_ALERT.ALARM.toString())
+                            .apply()
+                    }
+                }
+
             }
             fromDate.setOnClickListener {
                 val c = Calendar.getInstance()
@@ -155,13 +186,14 @@ class AlertsFragment : Fragment(), OnAlertListener {
                 val dpd = DatePickerDialog(
                     requireContext(), { view, year, monthOfYear, dayOfMonth ->
 
-                        var dateString=("$dayOfMonth ${DateFormatSymbols(Locale.ENGLISH).months[monthOfYear]}, $year")
-                        fromDate.text =dateString
-                        val format=SimpleDateFormat("dd MMM, yyyy")
-                        dateFrom=format.parse(dateString).time
+                        var dateString =
+                            ("$dayOfMonth ${DateFormatSymbols(Locale.ENGLISH).months[monthOfYear]}, $year")
+                        fromDate.text = dateString
+                        val format = SimpleDateFormat("dd MMM, yyyy")
+                        dateFrom = format.parse(dateString).time
                     }, year, month, day
                 )
-
+                dpd.datePicker.minDate = c.timeInMillis;
                 dpd.show()
             }
             toDate.setOnClickListener {
@@ -174,10 +206,12 @@ class AlertsFragment : Fragment(), OnAlertListener {
                 val dpd = DatePickerDialog(
                     requireContext(),
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        var dateString=("$dayOfMonth ${DateFormatSymbols(Locale.ENGLISH).months[monthOfYear]}, $year")
-                        toDate.text =dateString
-                        val format=SimpleDateFormat("dd MMM, yyyy")
-                        dateTo=format.parse(dateString).time  },
+                        var dateString =
+                            ("$dayOfMonth ${DateFormatSymbols(Locale.ENGLISH).months[monthOfYear]}, $year")
+                        toDate.text = dateString
+                        val format = SimpleDateFormat("dd MMM, yyyy")
+                        dateTo = format.parse(dateString).time
+                    },
                     year,
                     month,
                     day
@@ -197,9 +231,9 @@ class AlertsFragment : Fragment(), OnAlertListener {
                         "AM"
                     }
                     txtTime.text = SimpleDateFormat("hh:mm a").format(cal.time)
-                    time= convertTimeToLong(SimpleDateFormat("hh:mm a").format(cal.time))
+                    time = convertTimeToLong(SimpleDateFormat("hh:mm a").format(cal.time))
                 }
-               val tpd= TimePickerDialog(
+                val tpd = TimePickerDialog(
                     requireContext(),
                     timeSetListner,
                     cal.get(Calendar.HOUR_OF_DAY),
@@ -207,7 +241,7 @@ class AlertsFragment : Fragment(), OnAlertListener {
                     false
                 )
 
-                   tpd.show()
+                tpd.show()
 
             }
             alertDialogView.findViewById<MaterialButton>(R.id.btn_save_alert).setOnClickListener {
@@ -224,7 +258,7 @@ class AlertsFragment : Fragment(), OnAlertListener {
                     alertDialog.dismiss()
                     Snackbar.make(
                         binding.root,
-                        "The alert added successfully",
+                        getString(R.string.alert_added_successfully),
                         Snackbar.LENGTH_LONG
                     ).show()
 
@@ -233,14 +267,12 @@ class AlertsFragment : Fragment(), OnAlertListener {
 
                     alertDialog.apply {
                         setIcon(R.drawable.info)
-                        setTitle("Info")
-                        setMessage("You have to set both date and time")
-                        setPositiveButton("OK") { _: DialogInterface?, _: Int ->
+                        setTitle(getString(R.string.info))
+                        setMessage(getString(R.string.enter_date_time))
+                        setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                         }
                     }.create().show()
                 }
-
-
             }
         }
     }
@@ -253,14 +285,14 @@ class AlertsFragment : Fragment(), OnAlertListener {
         alertViewModel.deleteAlert(alertObject)
         alertAdapter.notifyDataSetChanged()
     }
-    fun setupWorker(roomalert:RoomAlertPojo) {
+    fun setupWorker(roomalert: RoomAlertPojo) {
         val calendar = java.util.Calendar.getInstance()
-        val currentTime = convertTimeToLong(getTimeToAlert( calendar.timeInMillis,"en"))
+        val currentTime = convertTimeToLong(getTimeToAlert(calendar.timeInMillis, "en"))
         val targetTime = roomalert.time
-        val initialDelay = targetTime-currentTime
-        println( getTimeToAlert(currentTime,"en")+currentTime)
-        println( getTimeToAlert(roomalert.time,"en")+targetTime)
-        println(initialDelay )
+        val initialDelay = targetTime - currentTime
+        println(getTimeToAlert(currentTime, "en") + currentTime)
+        println(getTimeToAlert(roomalert.time, "en") + targetTime)
+        println(initialDelay)
 
         val data = Data.Builder()
         data.putString("address", roomalert.countryName)
@@ -270,13 +302,19 @@ class AlertsFragment : Fragment(), OnAlertListener {
         data.putString("alertWorker", alert)
         val workRequest = PeriodicWorkRequestBuilder<AlertWorker>(1, TimeUnit.DAYS)
             .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-            .addTag(roomalert.dateFrom.toString()+roomalert.dateTo.toString())
-            .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
+            .addTag(roomalert.dateFrom.toString() + roomalert.dateTo.toString())
+            .setConstraints(
+                Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+            )
             .setInputData(data.build())
             .build()
-        WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(roomalert.dateFrom.toString()+roomalert.dateTo.toString(),
-            ExistingPeriodicWorkPolicy.REPLACE,workRequest)
+        WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
+            roomalert.dateFrom.toString() + roomalert.dateTo.toString(),
+            ExistingPeriodicWorkPolicy.REPLACE, workRequest
+        )
     }
+
+
     private fun checkOverlayPermission() {
         if (!Settings.canDrawOverlays(requireContext())) {
             val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
