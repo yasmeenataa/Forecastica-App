@@ -102,7 +102,6 @@ class HomeFragment : Fragment() {
                 Constants.ENUM_LOCATION.Gps.toString()
             )
             if (location.equals(Constants.ENUM_LOCATION.Gps.toString())) {
-                if (checkPermissions())
                     getLastLocation()
             } else {
                 latitude = sharedPreferences.getFloat(Constants.MAP_LATH, 0f).toDouble()
