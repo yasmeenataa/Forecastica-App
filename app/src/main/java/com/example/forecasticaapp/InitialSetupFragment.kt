@@ -43,6 +43,10 @@ class InitialSetupFragment : Fragment() {
 
                 if (isConnected(requireContext())) {
                     sharedPreference.edit().putBoolean("first_install", false).apply()
+                    Constants.FIRST_INSTALL=1
+                    sharedPreference.edit()
+                        .putString(Constants.ALERT_TYPE, Constants.Enum_ALERT.NOTIFICATION.toString())
+                        .apply()
                     if (binding.notificationSwitchSetup.isChecked) {
                         sharedPreference.edit().putString(
                             Constants.NOTIFICATIONS,
