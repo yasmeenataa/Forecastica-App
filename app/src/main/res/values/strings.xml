@@ -63,5 +63,17 @@
     <string name="country">Country</string>
     <string name="weather_alarm">Weather Alarm</string>
     <string name="features">permission</string>
+    <string name="ultra_violet">Ultra Violet</string>
+    <string name="checkInternet">You\'re offline, Check Internet Connection</string>
+    <string name="alarm">Alarm</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="enter_date_time">You have to set both date and time</string>
+    <string name="info">Info</string>
+    <string name="alert_added_successfully">The alert added successfully</string>
+    <string name="setup_alert">Setup Alert</string>
+    <string name="yes">Yes</string>
+    <string name="add_location">Add Location</string>
+
+
 
 </resources>
