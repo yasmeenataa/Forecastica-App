@@ -63,7 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="2dp"
-                        android:checked="false"
+
                         android:buttonTint="@color/secondary_color"
                         android:text="@string/english"
                         android:textColor="@color/white"
@@ -208,7 +208,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="2dp"
-                        android:checked="false"
+                        android:checked="true"
+                        android:enabled="true"
                         android:buttonTint="@color/secondary_color"
                         android:text="@string/gps"
                         android:textColor="@color/white"
@@ -233,7 +234,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/temperature_card_view"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
+            android:layout_height="180dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="16dp"
@@ -264,27 +265,54 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/slash"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/txt_temperature"
+                    app:layout_constraintStart_toEndOf="@+id/txt_temperature"
+                    app:layout_constraintTop_toTopOf="@+id/txt_temperature"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/txt_wind_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/wind_speed"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView4"
+                    app:layout_constraintStart_toEndOf="@+id/textView4"
+                    app:layout_constraintTop_toTopOf="@+id/textView4" />
+
                 <RadioGroup
                     android:id="@+id/temperature_radio_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
+
                     android:layout_marginBottom="16dp"
-                    android:layout_marginEnd="15dp"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/txt_temperature"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintHorizontal_bias="0.049"
                     app:layout_constraintStart_toStartOf="@+id/txt_temperature"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_temperature">
+                    app:layout_constraintTop_toBottomOf="@+id/txt_temperature"
+                    app:layout_constraintVertical_bias="0.0">
 
                     <RadioButton
                         android:id="@+id/celsius_radio_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
-                        android:checked="false"
                         android:buttonTint="@color/secondary_color"
+                        android:checked="false"
                         android:text="@string/celsius"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
@@ -295,8 +323,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
-                        android:text="@string/kelvin"
                         android:buttonTint="@color/secondary_color"
+                        android:checked="true"
+                        android:enabled="true"
+                        android:text="@string/kelvin"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -306,93 +336,59 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="10dp"
+                        android:buttonTint="@color/secondary_color"
                         android:text="@string/fahrenheit"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/secondary_color"
-                        />
-                </RadioGroup>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
-            android:id="@+id/windSpeed_card_view"
-            android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:elevation="20dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            >
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/wind_speed_constraint_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/light_blue">
-
-
-                <TextView
-
-                    android:id="@+id/txt_wind_speed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="@string/wind_speed"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.082" />
-
-                <RadioGroup
-                    android:id="@+id/wind_radio_group"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/txt_wind_speed"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/txt_wind_speed">
-
-                    <RadioButton
-                        android:id="@+id/meter_radio_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:checked="false"
-                        android:text="@string/meter_sec"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/secondary_color" />
-
-                    <RadioButton
-                        android:id="@+id/mile_radio_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="10dp"
-                        android:text="@string/mile_hour"
-                        android:textColor="@color/white"
-                        android:buttonTint="@color/secondary_color"
                         android:textSize="18sp" />
                 </RadioGroup>
 
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:buttonTint="@color/secondary_color"
+                    android:text="@string/meter_sec"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView7"
+                    app:layout_constraintStart_toStartOf="@+id/temperature_radio_group"
+                    app:layout_constraintTop_toBottomOf="@+id/temperature_radio_group" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="27dp"
+                    android:layout_marginTop="4dp"
+                    android:buttonTint="@color/secondary_color"
+                    android:text="@string/meter_sec"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@+id/textView6"
+                    app:layout_constraintHorizontal_bias="0.346"
+                    app:layout_constraintStart_toEndOf="@+id/textView5"
+                    app:layout_constraintTop_toBottomOf="@+id/temperature_radio_group" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="28dp"
+                    android:buttonTint="@color/secondary_color"
+                    android:text="@string/mile_hour"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="@+id/temperature_radio_group"
+                    app:layout_constraintTop_toBottomOf="@+id/temperature_radio_group" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
+
 
 
 

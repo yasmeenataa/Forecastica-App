@@ -58,7 +58,7 @@
 
         <TextView
             android:id="@+id/txt_desc_day"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="15dp"

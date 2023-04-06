@@ -281,7 +281,7 @@
                         android:id="@+id/txt_ultraVio"
                         style="@style/custom_textView"
                         android:layout_marginTop="4dp"
-                        android:text="Ultra Violet"
+                        android:text="@string/ultra_violet"
                         android:fontFamily="sans-serif"
                         android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="@+id/ultraVio_measure"
