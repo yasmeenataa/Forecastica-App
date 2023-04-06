@@ -21,6 +21,7 @@ object Constants{
     const val MAP_LATH="MAP_LATH"
     const val COUNTRY_NAME="CountryName"
     const val ALERT_TYPE="ALERT_TYPE"
+     var FIRST_INSTALL=0
 
 
 
